@@ -1,0 +1,42 @@
+{
+  "_resourceType": "scene",
+  "id": "dd635dc7-80f5-40bc-b3e9-1e7b07c8cc49",
+  "_index": 3,
+  "name": "20x18_2",
+  "backgroundId": "ad526222-6ac0-4140-9fe6-7b95054cdbcc",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 20,
+  "height": 18,
+  "type": "ADVENTURE",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "0f!19!0f14+16!0f2+1a!16!0f2+1a!16!0f2+1a!16!0f2+1a!16!0f3+0010+15!0f2+1a!0010+0f3+19!0010+0f4+0010+16!0f3+008+15!0f2+19!004+15!0f2+1a!008+0f4+004+0f2+008+15!0f5+004+0f2+008+0f5+1a!004+16!0f2+19!004+15!0f6+19!004+15!0f3+004+0f8+004+0f4+15!0f2+19!0f8+004+0f3+1a!0f4+16!0f2+1a!16!0f2+1a!004+16!0f2+19!0f4+00c+15!0f3+16!0f2+1a!00c+0f4+006+15!0f2+19!006+0f3+1a!006+0f4+006+16!0f!",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_4",
+  "x": 432,
+  "y": 72,
+  "script": [
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "6a58fd33-a8e2-46d3-aea4-413f3bcea52a",
+        "direction": "down",
+        "rounded": false
+      },
+      "id": "450664f5-04f3-4770-8b02-d7710ae300a9"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "68e7c92c-c88a-4d2d-9e4f-d82f6c7779bb",
+        "direction": "left",
+        "rounded": false
+      },
+      "id": "4ac6d2ba-523d-4801-af5e-b00adfc17882"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

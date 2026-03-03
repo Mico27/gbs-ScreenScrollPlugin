@@ -1,0 +1,12 @@
+{
+  "_resourceType": "background",
+  "id": "b4b191dc-aac6-48f1-9199-e42c0a579f5d",
+  "name": "TallMap",
+  "symbol": "bg_tallmap",
+  "tileColors": "",
+  "filename": "TallMap.png",
+  "width": 20,
+  "height": 36,
+  "imageWidth": 160,
+  "imageHeight": 288
+}

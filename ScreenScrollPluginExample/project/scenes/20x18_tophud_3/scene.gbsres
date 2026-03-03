@@ -1,0 +1,86 @@
+{
+  "_resourceType": "scene",
+  "id": "676a1826-d291-40a2-b6d5-7a73e9008ac2",
+  "_index": 16,
+  "name": "20x18_TopHud_3",
+  "backgroundId": "4fd2d087-7ccf-4e09-a8c8-5e2b3b76d2a9",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 40,
+  "height": 40,
+  "type": "ADVENTURE",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "00640+",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_17",
+  "x": 1448,
+  "y": 592,
+  "script": [
+    {
+      "command": "EVENT_GBVM_SCRIPT",
+      "args": {
+        "script": "VM_SET_CONST_UINT8 _scroll_bottom_margin, 2\nVM_SET_CONST_UINT8 _scroll_top_offset, 16"
+      },
+      "id": "3b1bb450-cc5a-4598-964d-c9eede752309"
+    },
+    {
+      "command": "EVENT_OVERLAY_SET_SCANLINE_CUTOFF",
+      "args": {
+        "y": {
+          "type": "number",
+          "value": 15
+        }
+      },
+      "id": "26dda175-b70c-4103-8ccd-a993787d021d"
+    },
+    {
+      "command": "EVENT_OVERLAY_MOVE_TO",
+      "args": {
+        "x": 0,
+        "y": 0,
+        "speed": -3
+      },
+      "id": "779fabfa-4233-4724-94c3-acd501e1b964"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "31908541-bcca-48fc-bc6e-2ee6af9e4ab8",
+        "direction": "left",
+        "rounded": false
+      },
+      "id": "24fa2d32-ac7c-433a-ae56-b014cc3e2c2d"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "31908541-bcca-48fc-bc6e-2ee6af9e4ab8",
+        "direction": "right",
+        "rounded": false
+      },
+      "id": "65ed3302-a052-46c0-a1ed-594b5f54ff5a"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "2fd5b05d-c219-4af2-8efa-c75ae532a870",
+        "direction": "down",
+        "rounded": false
+      },
+      "id": "5669fcfb-4a7a-4c12-b23d-f5b10067600d"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "2fd5b05d-c219-4af2-8efa-c75ae532a870",
+        "direction": "up",
+        "rounded": false
+      },
+      "id": "3ffc9e22-b712-493f-93f3-c2aa2598dc38"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

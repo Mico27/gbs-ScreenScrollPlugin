@@ -1,0 +1,12 @@
+{
+  "_resourceType": "background",
+  "id": "f52794cc-ad14-4944-919d-21f1f3d9ad4e",
+  "name": "WideMap2",
+  "symbol": "bg_widemap2",
+  "tileColors": "",
+  "filename": "WideMap2.png",
+  "width": 40,
+  "height": 16,
+  "imageWidth": 320,
+  "imageHeight": 128
+}

@@ -1,0 +1,12 @@
+{
+  "_resourceType": "background",
+  "id": "4fd2d087-7ccf-4e09-a8c8-5e2b3b76d2a9",
+  "name": "LargeMap2",
+  "symbol": "bg_largemap2",
+  "tileColors": "",
+  "filename": "LargeMap2.png",
+  "width": 40,
+  "height": 40,
+  "imageWidth": 320,
+  "imageHeight": 320
+}

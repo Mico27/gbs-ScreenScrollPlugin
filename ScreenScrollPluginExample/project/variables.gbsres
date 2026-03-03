@@ -1,0 +1,16 @@
+{
+  "_resourceType": "variables",
+  "variables": [
+    {
+      "id": "0",
+      "name": "Test_BKG_x",
+      "symbol": "var_test_bkg_x"
+    },
+    {
+      "id": "1",
+      "name": "Text_BKG_y",
+      "symbol": "var_text_bkg_y"
+    }
+  ],
+  "constants": []
+}

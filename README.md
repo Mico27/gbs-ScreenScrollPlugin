@@ -1,10 +1,12 @@
-# GBS-scrollScenePlugin
- Single Scene Screen Scroll plugin for GBS
+# gbs-ScreenScrollPlugin
+ Screen Scroll plugin between scenes for GBS
 
 How to use:
-unzip and install in the plugin folder, if you are using Platformer+ or some other plugin, some conflicts might occur.
-all default scene types are supported. Each scene must preferably be screen size (20 8pxtiles wide and 18 8pxtile tall)
-you can also make it smaller (for example 16 tile tall) if you are displaying a 2 tile tall hud at the bottom of the screen.
+all default scene types are supported. Due to how scene scrolling works, the maximum size of a scene is halved (max width = 128 tiles and max height = 128 tiles)
+Scenes can be bigger than the screen size, however, neighboring scenes must match the same size of the side it is connected to.
+If you are displaying a hud at the bottom, you can set in the screenscroll settings a bottom margin the size of the height of your hud in tile.
+For a hud displayed to the right side, add the right margin to the width of your hud in tile.
+For a hud displayed on top, set the bottom margin to the size of the height of your hud in tile and set the top scroll offset to the size of the height of the hud in pixels.
 
 To be able to make a scene able to screen scroll into another scene, add the "add neighbour scene" event in the init of the scene.
 There is no need to add a trigger on the edge of the scene with a "change scene event" on it. The plugin takes care of it.
@@ -12,9 +14,3 @@ Click the rounding tile checkbox if you are using the TopDown scene type.
 
 Also make sure you use a common tileset between the scene that you are scrolling to. (Click on the puzzle piece on a scene to assign a common tileset)
 
-
-https://github.com/Mico27/GBS-scrollScenePlugin/assets/32064874/bf08c9e1-6e72-4e7b-8fd9-ec2462bc76a9
-
-Added a new event to be able to store the current scroll offset in a variable. To use to correct a position when writing/submapping to the background.
-![image](https://github.com/user-attachments/assets/b79500f7-afc9-4332-b0d8-b5edb4a005e8)
-![image](https://github.com/user-attachments/assets/d32ed6b6-0464-40a3-8059-fc3864750173)

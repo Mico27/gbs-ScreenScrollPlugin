@@ -1,0 +1,60 @@
+{
+  "_resourceType": "scene",
+  "id": "c9397579-f625-46db-aa3f-fba06f8f81d1",
+  "_index": 5,
+  "name": "LargeMap",
+  "backgroundId": "77263433-8845-4171-86c9-62395b4eaa4f",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 40,
+  "height": 36,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "0f2+0010+0f18+0010+0f18+0016+0f4+00c+0f2+0016+0f4+00c+0f2+0012+0f8+00c+0f2+0012+0f8+00c+0f2+0012+0f4+0010+0f2+0012+0f4+0010+0f2+0026+0f2+0026+0f2+0026+0f2+0026+0f2+008+0f4+001a+0f2+008+0f4+001a+0f2+008+0f4+00e+0f4+006+0f4+008+0f4+00e+0f4+006+0f8+0016+0f4+006+0f8+0016+0f4+006+0f8+00c+0f4+0010+0f8+00c+0f4+0010+0f4+0010+0f4+0010+0f4+0010+0f4+0010+0f2+0014+0f4+00e+0f2+0014+0f4+00e+0f2+008+0f4+004+0f8+00a+0f6+008+0f4+004+0f8+00a+0f6+008+0f4+004+0f8+00a+0f6+008+0f4+004+0f8+00a+0f6+0010+0f8+00e+0f2+0010+0f8+00e+0f2+00e+0f6+0012+0f2+00e+0f6+0012+0f2+00e+0f6+0012+0f2+00e+0f6+0012+0f18+0010+0f18+0010+0f2+",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_7",
+  "x": 176,
+  "y": 616,
+  "script": [
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "a498e375-fc3d-4de1-808c-e7bbaaf4bf84",
+        "direction": "right",
+        "rounded": true
+      },
+      "id": "7b3edafe-12c2-49a5-b21f-71ebbe6f1017"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "a498e375-fc3d-4de1-808c-e7bbaaf4bf84",
+        "direction": "left",
+        "rounded": true
+      },
+      "id": "00a410ae-6a72-4d1e-8114-20f3ad43f6c1"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "eb00117f-550b-418b-b672-72a5e40c0ecf",
+        "direction": "up",
+        "rounded": true
+      },
+      "id": "80d3b119-46c1-4b21-9b72-2d568c599347"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "eb00117f-550b-418b-b672-72a5e40c0ecf",
+        "direction": "down",
+        "rounded": true
+      },
+      "id": "7c798b47-0f6b-49d4-8dc4-a857247d2288"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

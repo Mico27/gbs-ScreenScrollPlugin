@@ -1,0 +1,81 @@
+{
+  "_resourceType": "scene",
+  "id": "52cc5cd3-c90a-4b0d-8a8d-5cefa015bdfe",
+  "_index": 15,
+  "name": "19x19_RightHud_2",
+  "backgroundId": "da2d8148-9f61-4818-9f97-f7f72f09680f",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 18,
+  "height": 18,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_16",
+  "x": 1104,
+  "y": 480,
+  "script": [
+    {
+      "command": "EVENT_OVERLAY_MOVE_TO",
+      "args": {
+        "x": 18,
+        "y": 0,
+        "speed": -3,
+        "__collapse": true
+      },
+      "id": "1464a6e5-d03b-41e8-a25d-24b49ac47dd2"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "a5393c8e-0fbb-4a7d-9ac0-63bab3558242",
+        "direction": "up",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "cfa77f3e-1f99-40f3-808f-087999fa9a82"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "a5393c8e-0fbb-4a7d-9ac0-63bab3558242",
+        "direction": "down",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "0a5ee225-484f-4a80-ac34-92379a2d9501"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "80f5f55c-f2ad-497b-9cee-49eed2f5f131",
+        "direction": "left",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "73bd88d8-46ef-4d78-b76e-38658bc803b3"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "80f5f55c-f2ad-497b-9cee-49eed2f5f131",
+        "direction": "right",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "3ef552c2-5cb4-452d-ad1e-7d1a8c44d115"
+    },
+    {
+      "command": "EVENT_GBVM_SCRIPT",
+      "args": {
+        "script": "VM_SET_CONST_UINT8 _scroll_right_margin, 2"
+      },
+      "id": "c55e41ac-7853-4d31-a362-7d166eb79c33"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

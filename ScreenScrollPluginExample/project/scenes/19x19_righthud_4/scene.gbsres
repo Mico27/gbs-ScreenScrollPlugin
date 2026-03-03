@@ -1,0 +1,81 @@
+{
+  "_resourceType": "scene",
+  "id": "a5393c8e-0fbb-4a7d-9ac0-63bab3558242",
+  "_index": 13,
+  "name": "19x19_RightHud_4",
+  "backgroundId": "9a116769-a104-4886-aa62-1862eaab448a",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 18,
+  "height": 36,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_14",
+  "x": 1104,
+  "y": 624,
+  "script": [
+    {
+      "command": "EVENT_OVERLAY_MOVE_TO",
+      "args": {
+        "x": 18,
+        "y": 0,
+        "speed": -3,
+        "__collapse": true
+      },
+      "id": "6104abb0-08a9-465b-9696-bd32c1c5bd06"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "52cc5cd3-c90a-4b0d-8a8d-5cefa015bdfe",
+        "direction": "up",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "49ac5c09-9d8c-4a74-9d95-3216cacefd0b"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "52cc5cd3-c90a-4b0d-8a8d-5cefa015bdfe",
+        "direction": "down",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "b40fd3a9-4968-4a28-a21f-db2bed089fa6"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "02d534c9-060f-4386-8dc8-8bd0de47dc2f",
+        "direction": "left",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "dfafe6bc-245c-4b73-9920-4e31b22e4da5"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "02d534c9-060f-4386-8dc8-8bd0de47dc2f",
+        "direction": "right",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "e86915a9-694d-4118-a533-11d258150204"
+    },
+    {
+      "command": "EVENT_GBVM_SCRIPT",
+      "args": {
+        "script": "VM_SET_CONST_UINT8 _scroll_right_margin, 2"
+      },
+      "id": "8d0ff6d7-e1d7-4b46-9be7-c40b2ca08390"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

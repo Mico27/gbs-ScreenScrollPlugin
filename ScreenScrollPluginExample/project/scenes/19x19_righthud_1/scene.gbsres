@@ -1,0 +1,81 @@
+{
+  "_resourceType": "scene",
+  "id": "80f5f55c-f2ad-497b-9cee-49eed2f5f131",
+  "_index": 14,
+  "name": "19x19_RightHud_1",
+  "backgroundId": "77fab739-c628-4237-a20d-595a06e5d05d",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 36,
+  "height": 18,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "00288+",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_15",
+  "x": 816,
+  "y": 480,
+  "script": [
+    {
+      "command": "EVENT_OVERLAY_MOVE_TO",
+      "args": {
+        "x": 18,
+        "y": 0,
+        "speed": -3,
+        "__collapse": true
+      },
+      "id": "e0802c6a-806d-4ae7-afc8-f357d8ed414e"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "52cc5cd3-c90a-4b0d-8a8d-5cefa015bdfe",
+        "direction": "right",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "bcf6b185-0aa4-42c5-ba07-e6d1f065f88c"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "52cc5cd3-c90a-4b0d-8a8d-5cefa015bdfe",
+        "direction": "left",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "2ad0d6df-e54a-4718-8b32-fc796742a451"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "02d534c9-060f-4386-8dc8-8bd0de47dc2f",
+        "direction": "up",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "5766f1df-be9d-429a-997e-1d3bd637e15b"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "02d534c9-060f-4386-8dc8-8bd0de47dc2f",
+        "direction": "down",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "98c2658e-0b6b-4f62-bac5-4a9aba8f8110"
+    },
+    {
+      "command": "EVENT_GBVM_SCRIPT",
+      "args": {
+        "script": "VM_SET_CONST_UINT8 _scroll_right_margin, 2"
+      },
+      "id": "268613df-1b8d-46b0-9385-19a0ee8aee51"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

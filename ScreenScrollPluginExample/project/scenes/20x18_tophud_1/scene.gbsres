@@ -1,0 +1,86 @@
+{
+  "_resourceType": "scene",
+  "id": "2fd5b05d-c219-4af2-8efa-c75ae532a870",
+  "_index": 18,
+  "name": "20x18_TopHud_1",
+  "backgroundId": "f52794cc-ad14-4944-919d-21f1f3d9ad4e",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 40,
+  "height": 16,
+  "type": "ADVENTURE",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "00280+",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_19",
+  "x": 1448,
+  "y": 464,
+  "script": [
+    {
+      "command": "EVENT_GBVM_SCRIPT",
+      "args": {
+        "script": "VM_SET_CONST_UINT8 _scroll_bottom_margin, 2\nVM_SET_CONST_UINT8 _scroll_top_offset, 16"
+      },
+      "id": "cb0a2d29-2cba-4620-8add-cc69e3211198"
+    },
+    {
+      "command": "EVENT_OVERLAY_SET_SCANLINE_CUTOFF",
+      "args": {
+        "y": {
+          "type": "number",
+          "value": 15
+        }
+      },
+      "id": "4278e3e0-f495-46ef-b3b9-c1e0b7ab2252"
+    },
+    {
+      "command": "EVENT_OVERLAY_MOVE_TO",
+      "args": {
+        "x": 0,
+        "y": 0,
+        "speed": -3
+      },
+      "id": "46b03ddb-934a-461a-a8a6-c124aae89754"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "cb840fc9-f2c6-4dea-814e-12b885466681",
+        "direction": "left",
+        "rounded": false
+      },
+      "id": "a182d08d-954c-4d22-8695-bab19963fb10"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "cb840fc9-f2c6-4dea-814e-12b885466681",
+        "direction": "right",
+        "rounded": false
+      },
+      "id": "e4332d83-96d0-491f-9ef3-336d8f8cbc78"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "676a1826-d291-40a2-b6d5-7a73e9008ac2",
+        "direction": "down",
+        "rounded": false
+      },
+      "id": "dde6ddd5-0455-410a-ae90-fd0ab47c69e4"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "676a1826-d291-40a2-b6d5-7a73e9008ac2",
+        "direction": "up",
+        "rounded": false
+      },
+      "id": "9b8ac061-248b-489e-ac05-2373bd815e6d"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

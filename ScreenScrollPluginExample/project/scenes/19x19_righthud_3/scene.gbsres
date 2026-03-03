@@ -1,0 +1,81 @@
+{
+  "_resourceType": "scene",
+  "id": "02d534c9-060f-4386-8dc8-8bd0de47dc2f",
+  "_index": 12,
+  "name": "19x19_RightHud_3",
+  "backgroundId": "5dcf5931-59ab-4e1d-8a75-46afb3362824",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 36,
+  "height": 36,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "00510+",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_13",
+  "x": 816,
+  "y": 624,
+  "script": [
+    {
+      "command": "EVENT_OVERLAY_MOVE_TO",
+      "args": {
+        "x": 18,
+        "y": 0,
+        "speed": -3,
+        "__collapse": true
+      },
+      "id": "4781316a-3e4d-4355-9f09-5f7a967773b3"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "a5393c8e-0fbb-4a7d-9ac0-63bab3558242",
+        "direction": "right",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "1e7e850a-a6d6-4f35-b203-c9aceed0bfd2"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "a5393c8e-0fbb-4a7d-9ac0-63bab3558242",
+        "direction": "left",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "14d6cbea-9891-4d26-bb2f-b2e085589017"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "80f5f55c-f2ad-497b-9cee-49eed2f5f131",
+        "direction": "up",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "50e64ae8-520e-4c4f-a8e6-35c77cfdb3de"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "80f5f55c-f2ad-497b-9cee-49eed2f5f131",
+        "direction": "down",
+        "rounded": true,
+        "__collapse": true
+      },
+      "id": "c92b5105-a522-4126-a851-49b6efb47309"
+    },
+    {
+      "command": "EVENT_GBVM_SCRIPT",
+      "args": {
+        "script": "VM_SET_CONST_UINT8 _scroll_right_margin, 2"
+      },
+      "id": "acae5875-24b9-45b0-bf6d-c4ac1f7e1bc8"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

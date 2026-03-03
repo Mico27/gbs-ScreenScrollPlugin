@@ -1,0 +1,12 @@
+{
+  "_resourceType": "background",
+  "id": "2e1e9e46-5ead-401f-a6ce-f1d4ad71196b",
+  "name": "overworld_3_12",
+  "symbol": "bg_overworld_3_12",
+  "tileColors": "",
+  "filename": "overworld_3_12.png",
+  "width": 20,
+  "height": 16,
+  "imageWidth": 160,
+  "imageHeight": 128
+}

@@ -1,0 +1,86 @@
+{
+  "_resourceType": "scene",
+  "id": "cb840fc9-f2c6-4dea-814e-12b885466681",
+  "_index": 19,
+  "name": "20x18_TopHud_2",
+  "backgroundId": "0f1a8db5-a68d-428b-8ab0-113c2b258142",
+  "tilesetId": "01f94c56-1fa6-4030-afb8-b6406e0c8b6e",
+  "width": 20,
+  "height": 16,
+  "type": "ADVENTURE",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "00140+",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_20",
+  "x": 1768,
+  "y": 464,
+  "script": [
+    {
+      "command": "EVENT_GBVM_SCRIPT",
+      "args": {
+        "script": "VM_SET_CONST_UINT8 _scroll_bottom_margin, 2\nVM_SET_CONST_UINT8 _scroll_top_offset, 16"
+      },
+      "id": "7ff59cbc-e17a-434b-a7d5-fd113d2ba77a"
+    },
+    {
+      "command": "EVENT_OVERLAY_SET_SCANLINE_CUTOFF",
+      "args": {
+        "y": {
+          "type": "number",
+          "value": 15
+        }
+      },
+      "id": "9eb4e446-6fd9-49c1-b6eb-092ac6d54942"
+    },
+    {
+      "command": "EVENT_OVERLAY_MOVE_TO",
+      "args": {
+        "x": 0,
+        "y": 0,
+        "speed": -3
+      },
+      "id": "221d4970-4ed5-4bb2-ae6c-fcaab4bd1b1b"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "2fd5b05d-c219-4af2-8efa-c75ae532a870",
+        "direction": "left",
+        "rounded": false
+      },
+      "id": "5828c414-5c6f-4b42-b04b-11c6167536a1"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "2fd5b05d-c219-4af2-8efa-c75ae532a870",
+        "direction": "right",
+        "rounded": false
+      },
+      "id": "a3ab974a-2dc9-4424-b1a6-00546b342e64"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "31908541-bcca-48fc-bc6e-2ee6af9e4ab8",
+        "direction": "down",
+        "rounded": false
+      },
+      "id": "9af17af5-5d2b-40c3-88c0-8a3b7b5e17f7"
+    },
+    {
+      "command": "EVENT_SET_NEIGHBOUR_SCENE",
+      "args": {
+        "sceneId": "31908541-bcca-48fc-bc6e-2ee6af9e4ab8",
+        "direction": "up",
+        "rounded": false
+      },
+      "id": "ecf1a38a-0c15-4851-9aff-50e7ee2702d4"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}
