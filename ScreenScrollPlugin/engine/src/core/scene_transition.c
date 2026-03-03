@@ -131,6 +131,9 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
         } while (VM_ISLOCKED());
         switch(direction){
             case DIRECTION_UP:
+                if (scroll_bottom_margin){
+                    scroll_render_rows(draw_scroll_x, 0, image_tile_height - 1, scroll_bottom_margin);
+                }
                 scroll_y = (SUBPX_TO_PX(camera_y) - (SCREENHEIGHT >> 1)) + 8;
             break;
             case DIRECTION_RIGHT:                
