@@ -55,10 +55,10 @@ INT16 transitioning_cam_pos_x;
 INT16 transitioning_cam_pos_y;
 
 void enable_transition_to_scene(void) BANKED {
-	//camera_settings &= ~(CAMERA_LOCK_FLAG);
-	//camera_x = SCROLL_CAM_X;
-	//camera_y = SCROLL_CAM_Y;
-	scene_transition_enabled = 1;
+    //camera_settings &= ~(CAMERA_LOCK_FLAG);
+    //camera_x = SCROLL_CAM_X;
+    //camera_y = SCROLL_CAM_Y;
+    scene_transition_enabled = 1;
 }
 
 void scene_transition_reset(void) BANKED {
@@ -68,40 +68,40 @@ void scene_transition_reset(void) BANKED {
     if (image_width < SCREENWIDTH){
         camera_settings &= ~(CAMERA_LOCK_X_FLAG);
     }
-	up_scene.bank = 0;
-	right_scene.bank = 0;
-	down_scene.bank = 0;
-	left_scene.bank = 0;
-	scene_transition_enabled = 0;
+    up_scene.bank = 0;
+    right_scene.bank = 0;
+    down_scene.bank = 0;
+    left_scene.bank = 0;
+    scene_transition_enabled = 0;
 }
 
 void check_transition_to_scene_collision(void) BANKED {	
-	if (scene_transition_enabled && !is_transitioning_scene && !CHK_FLAG(PLAYER.flags, ACTOR_FLAG_DISABLED)) {		
-		// Check for scene scroll
-		if (transitioning_player_pos_y != PLAYER.pos.y)
-		{
-			transitioning_player_pos_y = 0x7FFF;
-			if (((WORD)PLAYER.pos.y) < player_transition_top_threshold){
-				transition_to_scene_modal(DIRECTION_UP);				
+    if (scene_transition_enabled && !is_transitioning_scene && !CHK_FLAG(PLAYER.flags, ACTOR_FLAG_DISABLED)) {		
+        // Check for scene scroll
+        if (transitioning_player_pos_y != PLAYER.pos.y)
+        {
+            transitioning_player_pos_y = 0x7FFF;
+            if (((WORD)PLAYER.pos.y) < player_transition_top_threshold){
+                transition_to_scene_modal(DIRECTION_UP);				
                 } else if ((WORD)PLAYER.pos.y > (TILE_TO_SUBPX(image_tile_height) - player_transition_bottom_threshold)){
-				transition_to_scene_modal(DIRECTION_DOWN);		
+                transition_to_scene_modal(DIRECTION_DOWN);		
             }
         }
-		if (transitioning_player_pos_x != PLAYER.pos.x)
-		{
-			transitioning_player_pos_x = 0x7FFF;
-			if (((WORD)PLAYER.pos.x) < player_transition_left_threshold){
-				transition_to_scene_modal(DIRECTION_LEFT);
+        if (transitioning_player_pos_x != PLAYER.pos.x)
+        {
+            transitioning_player_pos_x = 0x7FFF;
+            if (((WORD)PLAYER.pos.x) < player_transition_left_threshold){
+                transition_to_scene_modal(DIRECTION_LEFT);
                 } else if ((WORD)PLAYER.pos.x > (TILE_TO_SUBPX(image_tile_width) - player_transition_right_threshold)){
-				transition_to_scene_modal(DIRECTION_RIGHT);
+                transition_to_scene_modal(DIRECTION_RIGHT);
             }
         }
     }
 }
 
 void transition_to_scene_modal(UBYTE direction) BANKED {
-	UBYTE scene_bank = 0;
-	const scene_t * scene = NULL;
+    UBYTE scene_bank = 0;
+    const scene_t * scene = NULL;
     switch(direction){
         case DIRECTION_UP:
             scene_bank = up_scene.bank;
@@ -120,12 +120,12 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
             scene = left_scene.ptr;
         break;    
     }
-	if (scene_bank && scene){
-        camera_settings &= ~(CAMERA_LOCK_FLAG);        
-		is_transitioning_scene = direction;              
-		transition_load_scene(scene_bank, scene, direction);		
-		uint8_t camera_arrived = FALSE;
-		uint8_t player_arrived = FALSE;        
+    if (scene_bank && scene){
+        camera_settings &= ~(CAMERA_LOCK_FLAG);
+        is_transitioning_scene = direction;
+        transition_load_scene(scene_bank, scene, direction);
+        uint8_t camera_arrived = FALSE;
+        uint8_t player_arrived = FALSE;
 		do {
 			script_runner_update();
         } while (VM_ISLOCKED());
@@ -184,25 +184,25 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
 }
 
 void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direction) BANKED {
-	// hide actors (except player)
-	actor_t *actor = actors_active_tail;
+    // hide actors (except player)
+    actor_t *actor = actors_active_tail;
     while (actor) {
-		if (actor != &PLAYER){
-			SET_FLAG(actor->flags, ACTOR_FLAG_HIDDEN);
+        if (actor != &PLAYER){
+            SET_FLAG(actor->flags, ACTOR_FLAG_HIDDEN);
         }		
-		actor = actor->prev;
+        actor = actor->prev;
     }
     UBYTE tmp_show_actors_on_overlay = show_actors_on_overlay;
     show_actors_on_overlay = TRUE;
-	// hide projectiles
-	projectiles_init();
-	// Update sprites before scene change
-	toggle_shadow_OAM();
-	actors_update();
-	actors_render();
-	projectiles_render();
-	activate_shadow_OAM();
-	wait_vbl_done();
+    // hide projectiles
+    projectiles_init();
+    // Update sprites before scene change
+    toggle_shadow_OAM();
+    actors_update();
+    actors_render();
+    projectiles_render();
+    activate_shadow_OAM();
+    wait_vbl_done();
     show_actors_on_overlay = tmp_show_actors_on_overlay;
     switch (direction){
         case DIRECTION_RIGHT:
@@ -231,11 +231,11 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
     // reset input events on scene change
     events_init(FALSE);
     // reset music events
-    music_init_events(FALSE);	
-	
-	load_scene(scene, scene_bank, TRUE);
+    music_init_events(FALSE);
     
-	switch (direction){
+    load_scene(scene, scene_bank, TRUE);
+    
+    switch (direction){
         case DIRECTION_LEFT:
             camera_x = TILE_TO_SUBPX(image_tile_width) + SCROLL_CAM_X;
             PLAYER.pos.x += TILE_TO_SUBPX(image_tile_width);
@@ -256,21 +256,21 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
         break;
     }
         
-	if (round_position_flags & direction){		
-		transitioning_player_pos_x = (transitioning_player_pos_x  & ~TILE_FRACTION_MASK);
-		transitioning_player_pos_y = (transitioning_player_pos_y  & ~TILE_FRACTION_MASK);
-		if (direction == DIRECTION_UP){
-			transitioning_player_pos_y += ONE_TILE_DISTANCE;
+    if (round_position_flags & direction){		
+        transitioning_player_pos_x = (transitioning_player_pos_x  & ~TILE_FRACTION_MASK);
+        transitioning_player_pos_y = (transitioning_player_pos_y  & ~TILE_FRACTION_MASK);
+        if (direction == DIRECTION_UP){
+            transitioning_player_pos_y += ONE_TILE_DISTANCE;
             } else if (direction == DIRECTION_LEFT){
-			transitioning_player_pos_x += ONE_TILE_DISTANCE;
+            transitioning_player_pos_x += ONE_TILE_DISTANCE;
         }
     }
 }
 
 uint8_t transition_camera_to(void) BANKED {
-	// Move camera towards destination
-	
-	if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) {        
+    // Move camera towards destination
+    
+    if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) {        
         return TRUE;
     }
     if (camera_x > transitioning_cam_pos_x) {
@@ -300,25 +300,24 @@ uint8_t transition_camera_to(void) BANKED {
             camera_y = transitioning_cam_pos_y;
         }      
     }	
-	if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) { 
+    if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) { 
         return TRUE;
     }	
-	return FALSE;
+    return FALSE;
 }
 
 
-uint8_t transition_player_to(void) BANKED {
-	
-	if ((PLAYER.pos.x == transitioning_player_pos_x) && (PLAYER.pos.y == transitioning_player_pos_y)) {
+uint8_t transition_player_to(void) BANKED {	
+    if ((PLAYER.pos.x == transitioning_player_pos_x) && (PLAYER.pos.y == transitioning_player_pos_y)) {
         return TRUE;
     }
-	
-	UINT16 oldPlayerPosX = PLAYER.pos.x + SCROLL_CAM_X;
-	UINT16 oldPlayerPosY = PLAYER.pos.y + SCROLL_CAM_Y;
-	UINT16 newPlayerPosX = transitioning_player_pos_x + SCROLL_CAM_X;
-	UINT16 newPlayerPosY = transitioning_player_pos_y + SCROLL_CAM_Y;
-	
-	if (oldPlayerPosX > newPlayerPosX) {
+    
+    UINT16 oldPlayerPosX = PLAYER.pos.x + SCROLL_CAM_X;
+    UINT16 oldPlayerPosY = PLAYER.pos.y + SCROLL_CAM_Y;
+    UINT16 newPlayerPosX = transitioning_player_pos_x + SCROLL_CAM_X;
+    UINT16 newPlayerPosY = transitioning_player_pos_y + SCROLL_CAM_Y;
+    
+    if (oldPlayerPosX > newPlayerPosX) {
         // Move left
         oldPlayerPosX -= SCROLL_PLAYER_SPEED;
         if (oldPlayerPosX <= newPlayerPosX) {
@@ -345,36 +344,36 @@ uint8_t transition_player_to(void) BANKED {
             oldPlayerPosY = newPlayerPosY;
         }      
     }
-	
-	PLAYER.pos.x = oldPlayerPosX - SCROLL_CAM_X;
-	PLAYER.pos.y = oldPlayerPosY - SCROLL_CAM_Y;
-	
-	if ((PLAYER.pos.x == transitioning_player_pos_x) && (PLAYER.pos.y == transitioning_player_pos_y)) {
+    
+    PLAYER.pos.x = oldPlayerPosX - SCROLL_CAM_X;
+    PLAYER.pos.y = oldPlayerPosY - SCROLL_CAM_Y;
+    
+    if ((PLAYER.pos.x == transitioning_player_pos_x) && (PLAYER.pos.y == transitioning_player_pos_y)) {
         return TRUE;
     }
-	return FALSE;
+    return FALSE;
 }
 
 void set_neighbour_scene(SCRIPT_CTX * THIS) OLDCALL BANKED {
-	uint8_t scene_bank = *(uint8_t *) VM_REF_TO_PTR(FN_ARG0);
-	const scene_t * scene = *(scene_t **) VM_REF_TO_PTR(FN_ARG1);
-	uint8_t direction = *(uint8_t *)VM_REF_TO_PTR(FN_ARG2);
-	uint8_t rounding = *(uint8_t *)VM_REF_TO_PTR(FN_ARG3);
-	enable_transition_to_scene();	
-	if (rounding){
-		round_position_flags |= direction;
-	}
-	if (direction == DIRECTION_UP){
-		up_scene.bank = scene_bank;
-		up_scene.ptr = (void *)scene;
-	} else if (direction == DIRECTION_RIGHT){
-		right_scene.bank = scene_bank;
-		right_scene.ptr = (void *)scene;
-	} else if (direction == DIRECTION_DOWN){
-		down_scene.bank = scene_bank;
-		down_scene.ptr = (void *)scene;
-	} else if (direction == DIRECTION_LEFT){
-		left_scene.bank = scene_bank;
-		left_scene.ptr = (void *)scene;
-	}
+    uint8_t scene_bank = *(uint8_t *) VM_REF_TO_PTR(FN_ARG0);
+    const scene_t * scene = *(scene_t **) VM_REF_TO_PTR(FN_ARG1);
+    uint8_t direction = *(uint8_t *)VM_REF_TO_PTR(FN_ARG2);
+    uint8_t rounding = *(uint8_t *)VM_REF_TO_PTR(FN_ARG3);
+    enable_transition_to_scene();	
+    if (rounding){
+        round_position_flags |= direction;
+    }
+    if (direction == DIRECTION_UP){
+        up_scene.bank = scene_bank;
+        up_scene.ptr = (void *)scene;
+    } else if (direction == DIRECTION_RIGHT){
+        right_scene.bank = scene_bank;
+        right_scene.ptr = (void *)scene;
+    } else if (direction == DIRECTION_DOWN){
+        down_scene.bank = scene_bank;
+        down_scene.ptr = (void *)scene;
+    } else if (direction == DIRECTION_LEFT){
+        left_scene.bank = scene_bank;
+        left_scene.ptr = (void *)scene;
+    }
 }

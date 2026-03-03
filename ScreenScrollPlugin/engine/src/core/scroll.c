@@ -16,8 +16,6 @@
 #include "scene_transition.h"
 #include "data/game_globals.h"
 
-#include "vm.h"
-
 // put submap of a large map to screen
 void set_bkg_submap(UINT8 x, UINT8 y, UINT8 w, UINT8 h, const unsigned char *map, UINT8 map_w) OLDCALL;
 
@@ -91,7 +89,7 @@ void scroll_update(void) BANKED {
 
     x = SUBPX_TO_PX(camera_x) - (SCREENWIDTH >> 1);
     y = SUBPX_TO_PX(camera_y) - (SCREENHEIGHT >> 1);
-    
+
     if (!(is_transitioning_scene & (DIRECTION_RIGHT | DIRECTION_LEFT))){
 		if ((x & 0x8000u) || (x < scroll_x_min)) {  // check for negative signed bit
 			x = scroll_x_min;
