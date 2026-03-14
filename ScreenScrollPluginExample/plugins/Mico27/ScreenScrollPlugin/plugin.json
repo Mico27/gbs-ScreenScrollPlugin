@@ -1,0 +1,606 @@
+{
+  "type": "enginePlugin",
+  "name": "Screen Scroll Plugin",
+  "author": "Mico27",
+  "url": "https://github.com/Mico27/gbs-ScreenScrollPlugin",
+  "description": "Adds the ability to scroll the screen between scenes.",
+  "license": "MIT",
+  "version": "1.0.0",
+  "gbsVersion": ">=4.2.2",
+  "engineAltRules": [
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin",
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin",
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin",
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "FadeStreetPlugin",
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin",
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin",
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "FadeStreetPlugin",
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "FadeStreetPlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin",
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin",
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "FadeStreetPlugin",
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin_MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/EditActorActiveIndexPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "EditActorActiveIndexPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_EditActorActiveIndexPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/FadeStreetPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "FadeStreetPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/FadeStreetPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin",
+          "FadeStreetPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin",
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/FadeStreetPlugin",
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "FadeStreetPlugin",
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin_MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/FadeStreetPlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "FadeStreetPlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/MetaTilePlugin",
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "MetaTilePlugin",
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "MetaTilePlugin_SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/AppendLoadTextPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "AppendLoadTextPlugin"
+        ]
+      },
+      "use": "AppendLoadTextPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/EditActorActiveIndexPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "EditActorActiveIndexPlugin"
+        ]
+      },
+      "use": "EditActorActiveIndexPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/FadeStreetPlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "FadeStreetPlugin"
+        ]
+      },
+      "use": "FadeStreetPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/MetaTilePlugin"
+        ]
+      },
+      "use": "MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "MetaTilePlugin"
+        ]
+      },
+      "use": "MetaTilePlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/SceneStackExPlugin"
+        ]
+      },
+      "use": "SceneStackExPlugin"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "SceneStackExPlugin"
+        ]
+      },
+      "use": "SceneStackExPlugin"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+Index: include\ui.h
+===================================================================
+--- include\ui.h
++++ include\ui.h
+@@ -32,13 +32,17 @@
+ 
+ #define ui_cursor_tile 0xCBu
+ #define ui_bg_tile 0xC4u
+ 
++#define TEXT_LAYER_BKG 0
++#define TEXT_LAYER_WIN 1
++
+ extern UBYTE win_pos_x, win_dest_pos_x;
+ extern UBYTE win_pos_y, win_dest_pos_y;
+ extern UBYTE win_speed;
+ 
+ extern UBYTE text_drawn;
++extern UBYTE current_text_layer;
+ 
+ #define TEXT_OPT_DEFAULT 0
+ #define TEXT_OPT_PRESERVE_POS 1
+ 

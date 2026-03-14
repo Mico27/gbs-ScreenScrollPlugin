@@ -1,0 +1,95 @@
+Index: src\core\data_manager.c
+===================================================================
+--- src\core\data_manager.c
++++ src\core\data_manager.c
+@@ -14,8 +14,10 @@
+ #include "ui.h"
+ #include "palette.h"
+ #include "data/spritesheet_none.h"
+ #include "data/data_bootstrap.h"
++#include "data/states_defines.h"
++#include "scene_transition.h"
+ #include "macro.h"
+ #include "scene_stack_ex.h"
+ 
+ #define ALLOC_BKG_TILES_TOWARDS_SPR
+@@ -61,10 +63,13 @@
+     scene_stack_count = 0;
+ }
+ 
+ void load_bkg_tileset(const tileset_t* tiles, UBYTE bank) BANKED {
+-    if ((!bank) && (!tiles)) return;
+-
++    #ifdef DISABLE_TILESET_LOAD_ON_TRANSITION
++        if (((!bank) && (!tiles)) || is_transitioning_scene) return;    
++        #else
++        if ((!bank) && (!tiles)) return;
++    #endif
+     UWORD n_tiles = ReadBankedUWORD(&(tiles->n_tiles), bank);
+ 
+     // load first background chunk, align to zero tile
+     UBYTE * data = tiles->tiles;
+@@ -210,10 +215,12 @@
+ 
+     collision_bank  = scn.collisions.bank;
+     collision_ptr   = scn.collisions.ptr;
+ 
++#ifndef DISABLE_UI_TILESET_LOAD
+     // Load UI tiles, they may be overwritten by the following load_background()
+     ui_load_tiles();
++#endif
+ 
+     // Load background + tiles
+     load_background(scn.background.ptr, scn.background.bank);
+ 
+@@ -228,21 +235,29 @@
+         scene_LCD_type = LCD_parallax;
+     }
+ 
+     scroll_x_min = scn.scroll_bounds.left;
+-    scroll_x_max = scn.scroll_bounds.right;
++    scroll_x_max = ((image_width < SCREENWIDTH)? 0: scn.scroll_bounds.right + TILE_TO_PX(scroll_right_margin));
+     scroll_y_min = scn.scroll_bounds.top;
+-    scroll_y_max = scn.scroll_bounds.bottom;
++    scroll_y_max = ((image_height < SCREENHEIGHT)? 0: scn.scroll_bounds.bottom + TILE_TO_PX(scroll_bottom_margin));
+ 
+     if (scene_type != SCENE_TYPE_LOGO) {
+         // Load player
+-        PLAYER.sprite = scn.player_sprite;
+-        UBYTE n_loaded = load_sprite(PLAYER.base_tile = 0, scn.player_sprite.ptr, scn.player_sprite.bank);
+-        allocated_sprite_tiles = (n_loaded > scn.reserve_tiles) ? n_loaded : scn.reserve_tiles;
+-        if (!vm_pop_scene_stack_state) {
+-            load_animations(scn.player_sprite.ptr, scn.player_sprite.bank, ANIM_SET_DEFAULT, PLAYER.animations);
+-            load_bounds(scn.player_sprite.ptr, scn.player_sprite.bank, &PLAYER.bounds);
++    #ifdef DISABLE_PLAYER_SPRITE_LOAD_ON_TRANSITION
++        if (is_transitioning_scene){
++            allocated_sprite_tiles = player_sprite_len;
++        } else {
++    #endif
++            PLAYER.sprite = scn.player_sprite;
++            UBYTE n_loaded = load_sprite(PLAYER.base_tile = 0, scn.player_sprite.ptr, scn.player_sprite.bank);
++            allocated_sprite_tiles = player_sprite_len = (n_loaded > scn.reserve_tiles) ? n_loaded : scn.reserve_tiles;
++            if (!vm_pop_scene_stack_state) {
++                load_animations(scn.player_sprite.ptr, scn.player_sprite.bank, ANIM_SET_DEFAULT, PLAYER.animations);
++                load_bounds(scn.player_sprite.ptr, scn.player_sprite.bank, &PLAYER.bounds);
++            }
++    #ifdef DISABLE_PLAYER_SPRITE_LOAD_ON_TRANSITION
+         }
++    #endif
+     } else {
+         // no player on logo, but still some little amount of actors may be present
+         PLAYER.base_tile = allocated_sprite_tiles = 0x68;
+         PLAYER.sprite = spritesheet_none_far;
+@@ -338,9 +353,11 @@
+     // Load triggers
+     if (triggers_len != 0) {
+         MemcpyBanked(&triggers, scn.triggers.ptr, sizeof(trigger_t) * triggers_len, scn.triggers.bank);
+     }
+-
++    if (!vm_pop_scene_stack_state) {
++        scene_transition_reset();
++    }
+     scroll_reset();
+     scroll_offset_x = 0;
+     scroll_offset_y = 0;
+     trigger_reset();

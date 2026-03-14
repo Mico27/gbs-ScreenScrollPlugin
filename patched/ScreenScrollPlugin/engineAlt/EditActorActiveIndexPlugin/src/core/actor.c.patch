@@ -1,0 +1,66 @@
+Index: src\core\actor.c
+===================================================================
+--- src\core\actor.c
++++ src\core\actor.c
+@@ -18,8 +18,9 @@
+ #include "vm.h"
+ #include "macro.h"
+ #include "actor_active_index.h"
+ #include "data/states_defines.h"
++#include "scene_transition.h"
+ 
+ #ifdef STRICT
+     #include <gb/bgb_emu.h>
+     #include <gb/crash_handler.h>
+@@ -124,9 +125,9 @@
+                 }
+             }
+         }
+ 
+-       if (CHK_FLAG(actor_flags, ACTOR_FLAG_PINNED)) {
++       if (actor == &PLAYER || CHK_FLAG(actor_flags, ACTOR_FLAG_PINNED)) {
+             actor = actor->prev;
+             continue;
+         }
+ 
+@@ -149,9 +150,9 @@
+             ) {
+                 // Deactivate if offscreen
+                 actor_t * prev = actor->prev;
+                 if (!VM_ISLOCKED()) {
+-                    if (actor == &PLAYER || CHK_FLAG(actor_flags, ACTOR_FLAG_PERSISTENT)) {
++                    if (CHK_FLAG(actor_flags, ACTOR_FLAG_PERSISTENT)) {
+                         SET_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
+                     } else {
+                         if (CHK_FLAG(actor_flags, ACTOR_FLAG_DISABLED)) {
+                             CLR_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
+@@ -330,9 +331,9 @@
+ #endif
+     if (CHK_FLAG(actor->flags, ACTOR_FLAG_ACTIVE | ACTOR_FLAG_DISABLED)) return;
+ 
+     // Check if on screen before activating to avoid flash of offscreen actors
+-    if (!CHK_FLAG(actor->flags, ACTOR_FLAG_PINNED)) {
++    if (actor != &PLAYER && !CHK_FLAG(actor->flags, ACTOR_FLAG_PINNED)) {
+         UBYTE actor_tile16_x = SUBPX_TO_TILE16(actor->pos.x) + ACTOR_BOUNDS_TILE16_HALF + TILE16_OFFSET;
+         UBYTE actor_tile16_y = SUBPX_TO_TILE16(actor->pos.y) + ACTOR_BOUNDS_TILE16_HALF + TILE16_OFFSET;
+         UBYTE screen_tile16_x = PX_TO_TILE16(draw_scroll_x) + TILE16_OFFSET;
+         UBYTE screen_tile16_x_end = screen_tile16_x + ACTOR_BOUNDS_TILE16 + SCREEN_TILE16_W;
+@@ -347,9 +348,9 @@
+             (actor_tile16_y < screen_tile16_y) ||
+             // Actor top edge > screen bottom edge
+             (actor_tile16_y > screen_tile16_y_end)
+         ) {
+-            if (actor == &PLAYER || CHK_FLAG(actor->flags, ACTOR_FLAG_PERSISTENT)) {
++            if (CHK_FLAG(actor->flags, ACTOR_FLAG_PERSISTENT)) {
+                 SET_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
+             } else {
+                 return;
+             } 
+@@ -601,5 +602,6 @@
+     } else if (player_iframes != 0) {
+         player_iframes--;
+     }
+     player_collision_actor = NULL;
++    check_transition_to_scene_collision();
+ }
+\ No newline at end of file
