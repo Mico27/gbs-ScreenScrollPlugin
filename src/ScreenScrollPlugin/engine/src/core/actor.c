@@ -38,7 +38,7 @@ BANKREF(ACTOR)
 const BYTE emote_offsets[] = {2, 1, 0, -1, -2, -3, -4, -5, -6, -5, -4, -3, -2, -1, 0};
 
 const metasprite_t emote_metasprite_8_16[]  = {
-    {8, 8, 0, 7}, {0, 8, 2, 7}, 
+    {8, 8, 0, 7}, {0, 8, 2, 7},
     {metasprite_end}
 };
 
@@ -86,7 +86,7 @@ void actors_update(void) BANKED {
     actor_t *actor;
     static uint8_t screen_tile16_x, screen_tile16_y, screen_tile16_x_end, screen_tile16_y_end;
     static uint8_t actor_tile16_x, actor_tile16_y;
-    static uint8_t tmp_iterator; 
+    static uint8_t tmp_iterator;
     static FASTUBYTE actor_flags;
 
     // Convert scroll pos to 16px tile coordinates
@@ -148,7 +148,7 @@ void actors_update(void) BANKED {
                     } else {
                         if (CHK_FLAG(actor_flags, ACTOR_FLAG_DISABLED)) {
                             CLR_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
-                        }                        
+                        }
                         deactivate_actor_impl(actor);
                     }
                 } else {
@@ -204,7 +204,7 @@ void actors_render(void) NONBANKED {
         if (CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {
            continue;
         }
-        
+
         if (CHK_FLAG(actor->flags, ACTOR_FLAG_PINNED)) {
             screen_x = SUBPX_TO_PX(actor->pos.x);
             screen_y = SUBPX_TO_PX(actor->pos.y);
@@ -248,9 +248,9 @@ static void deactivate_actor_impl(actor_t *actor) {
     if (actor == &PLAYER) return;
     CLR_FLAG(actor->flags, ACTOR_FLAG_ACTIVE);
     DL_REMOVE_ITEM(actors_active_head, actor);
-	if (actors_active_tail == actor){
-		actors_active_tail = actor->prev;
-	}
+    if (actors_active_tail == actor){
+        actors_active_tail = actor->prev;
+    }
     DL_PUSH_HEAD(actors_inactive_head, actor);
     if ((actor->hscript_update & SCRIPT_TERMINATED) == 0) {
         script_terminate(actor->hscript_update);
@@ -301,7 +301,7 @@ static void activate_actor_impl(actor_t *actor) {
                 SET_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
             } else {
                 return;
-            } 
+            }
         }
     }
 

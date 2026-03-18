@@ -135,7 +135,7 @@ UBYTE scroll_viewport(parallax_row_t * port) {
             shift_scroll_x = draw_scroll_x >> port->shift;
         }
 
-        port->shadow_scx = shift_scroll_x;        
+        port->shadow_scx = shift_scroll_x;
         UBYTE shift_col = PX_TO_TILE(shift_scroll_x);
 
         // If column is +/- 1 just render next column
@@ -149,8 +149,8 @@ UBYTE scroll_viewport(parallax_row_t * port) {
         } else if (current_col != new_col) {
             // If column differs by more than 1 render entire viewport
             scroll_render_rows(shift_scroll_x, 0, port->start_tile, port->tile_height);
-        }  
-        return FALSE;   
+        }
+        return FALSE;
     } else {
         // last parallax slice OR no parallax
         port->shadow_scx = draw_scroll_x;
@@ -225,23 +225,23 @@ void scroll_render_cols(INT16 scroll_x, INT16 scroll_y, BYTE col_offset, BYTE n_
     // Clear pending rows/ columns
     pending_w_i = 0;
     pending_h_i = 0;
-	
-	if (scroll_render_disabled) return;
+
+    if (scroll_render_disabled) return;
 
     UBYTE x = MAX(0, PX_TO_TILE(scroll_x) + col_offset);
     UBYTE y = PX_TO_TILE(scroll_y);
     UBYTE height = MIN(SCREEN_TILE_REFRES_H, image_tile_height);
-    
+
     for (BYTE i = 0; i != n_cols && x != image_tile_width; ++i, x++) {
         scroll_load_col(x, y, height);
         activate_actors_in_col(x, y);
-    }	
+    }
 }
 
 void scroll_queue_row(UBYTE x, UBYTE y) {
     while (pending_w_i) {
         // If previous row wasn't fully rendered
-        // render it now before starting next row        
+        // render it now before starting next row
         scroll_load_pending_row();
     }
 
@@ -314,7 +314,7 @@ void load_metatile_col(const UBYTE* from, UBYTE x, UBYTE y, UBYTE height, UBYTE 
 void load_tile_row(const unsigned char * from, UBYTE x, UBYTE y, UBYTE width, UBYTE bank) NONBANKED {
     _save_bank = CURRENT_BANK;
     SWITCH_ROM(bank);
-    UWORD y_offset = (y * (UWORD)image_tile_width); 
+    UWORD y_offset = (y * (UWORD)image_tile_width);
     width = width + x;
     for (x; x != width; x++) {
         set_vram_byte((UBYTE*)(0x9800 + bkg_address_offset), *(from + y_offset + x));
@@ -324,9 +324,9 @@ void load_tile_row(const unsigned char * from, UBYTE x, UBYTE y, UBYTE width, UB
 }
 
 void load_tile_col(const unsigned char * from, UBYTE x, UWORD y, UWORD height, UBYTE bank) NONBANKED {
-    _save_bank = CURRENT_BANK;    
+    _save_bank = CURRENT_BANK;
     SWITCH_ROM(bank);
-    UWORD tile_offset = (y * (UINT16)image_tile_width) + x; 
+    UWORD tile_offset = (y * (UINT16)image_tile_width) + x;
     height = height * (UINT16)image_tile_width;
     for (y = 0; y != height; y += (UINT16)image_tile_width) {
         set_vram_byte((UBYTE*)(0x9800 + bkg_address_offset), *(from + tile_offset + y));
@@ -336,8 +336,8 @@ void load_tile_col(const unsigned char * from, UBYTE x, UWORD y, UWORD height, U
 }
 
 void scroll_load_row(UBYTE x, UBYTE y) {
-    UBYTE width = MIN(SCREEN_TILE_REFRES_W, image_tile_width);	
-    // DMG Row Load	
+    UBYTE width = MIN(SCREEN_TILE_REFRES_W, image_tile_width);
+    // DMG Row Load
     bkg_address_offset = ((UWORD)get_bkg_xy_addr((x + bkg_offset_x), (y + bkg_offset_y))) - 0x9800;
     if (metatile_bank){
         load_metatile_row(metatile_ptr, x, y, width, metatile_bank);
@@ -359,9 +359,9 @@ void scroll_load_row(UBYTE x, UBYTE y) {
 }
 
 /* Update pending (up to 5) rows */
-void scroll_load_pending_row(void) {    
-    UBYTE width = MIN(pending_w_i, PENDING_BATCH_SIZE);	
-    // DMG Row Load	
+void scroll_load_pending_row(void) {
+    UBYTE width = MIN(pending_w_i, PENDING_BATCH_SIZE);
+    // DMG Row Load
     bkg_address_offset = ((UWORD)get_bkg_xy_addr((pending_w_x + bkg_offset_x) & 31, (pending_w_y + bkg_offset_y) & 31)) - 0x9800;
     if (metatile_bank){
         load_metatile_row(metatile_ptr, pending_w_x, pending_w_y, width, metatile_bank);
@@ -385,14 +385,14 @@ void scroll_load_pending_row(void) {
 }
 
 
-void scroll_load_col(UBYTE x, UBYTE y, UBYTE height) {	
+void scroll_load_col(UBYTE x, UBYTE y, UBYTE height) {
     // DMG Column Load
     bkg_address_offset = ((UWORD)get_bkg_xy_addr((x + bkg_offset_x) & 31, (y + bkg_offset_y) & 31)) - 0x9800;
     if (metatile_bank){
         load_metatile_col(metatile_ptr, x, y, height, metatile_bank);
     } else {
         load_tile_col(image_ptr, x, y, height, image_bank);
-    }	
+    }
 #ifdef CGB
     if (_is_CGB) {  // Color Column Load
         VBK_REG = 1;
@@ -408,14 +408,14 @@ void scroll_load_col(UBYTE x, UBYTE y, UBYTE height) {
 }
 
 void scroll_load_pending_col(void) {
-    UBYTE height = MIN(pending_h_i, PENDING_BATCH_SIZE);	
+    UBYTE height = MIN(pending_h_i, PENDING_BATCH_SIZE);
     // DMG Column Load
     bkg_address_offset = ((UWORD)get_bkg_xy_addr((pending_h_x + bkg_offset_x) & 31, (pending_h_y + bkg_offset_y) & 31)) - 0x9800;
     if (metatile_bank){
         load_metatile_col(metatile_ptr, pending_h_x, pending_h_y, height, metatile_bank);
     } else {
         load_tile_col(image_ptr, pending_h_x, pending_h_y, height, image_bank);
-    }	
+    }
 #ifdef CGB
     if (_is_CGB) {  // Color Column Load
         VBK_REG = 1;

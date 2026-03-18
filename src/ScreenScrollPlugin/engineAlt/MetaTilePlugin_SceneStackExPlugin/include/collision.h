@@ -18,7 +18,7 @@
 #define METATILE_SIZE_16    1
 
 #if METATILE_SIZE == METATILE_SIZE_16
-    
+
 #define METATILE_X_OFFSET(x) (x >> 1)
 #define METATILE_Y_OFFSET(y) ((y >> 1) << image_tile_width_bit)
 #define TILE_X_OFFSET(x) (x & 1)
@@ -63,9 +63,9 @@ extern UBYTE scene_transition_enabled;
  * @return Point is within bounding box
  */
 inline UBYTE bb_contains(rect16_t *bb, upoint16_t *offset, upoint16_t *point) {
-    if ((point->x < offset->x + bb->left) || 
+    if ((point->x < offset->x + bb->left) ||
         (point->x > offset->x + bb->right)) return FALSE;
-    if ((point->y < offset->y + bb->top) || 
+    if ((point->y < offset->y + bb->top) ||
         (point->y > offset->y + bb->bottom)) return FALSE;
     return TRUE;
 }
@@ -81,7 +81,7 @@ inline UBYTE bb_contains(rect16_t *bb, upoint16_t *offset, upoint16_t *point) {
  */
 inline UBYTE bb_intersects(rect16_t *bb_a, upoint16_t *offset_a, rect16_t *bb_b, upoint16_t *offset_b) {
     if ((offset_b->x + bb_b->left   > offset_a->x + bb_a->right) ||
-        (offset_b->x + bb_b->right  < offset_a->x + bb_a->left)) return FALSE;    
+        (offset_b->x + bb_b->right  < offset_a->x + bb_a->left)) return FALSE;
     if ((offset_b->y + bb_b->top    > offset_a->y + bb_a->bottom) ||
         (offset_b->y + bb_b->bottom < offset_a->y + bb_a->top)) return FALSE;
     return TRUE;
@@ -112,7 +112,7 @@ inline UBYTE tile_at(UBYTE tx, UBYTE ty) {
 /**
  * Test for a tile matching mask in a vertical range from ty_start to ty_end at column tx.
  * Updates globals tile_hit_x and tile_hit_y which can be read afterwards to determine which tile matched
- * 
+ *
  * @param tile_mask Tile bitmask to match
  * @param tx Tile x-coordinate
  * @param ty_start Starting tile y-coordinate

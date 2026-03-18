@@ -74,7 +74,7 @@ UBYTE tile_col_test_range_x(UBYTE tile_mask, UBYTE ty, UBYTE tx_start, UBYTE tx_
         if (tile_hit_x >= image_tile_width) {
           SWITCH_ROM(_save);
           return (!scene_transition_enabled && (COLLISION_ALL & tile_mask)) ? COLLISION_ALL : 0;
-        }                
+        }
     }
     SWITCH_ROM(_save);
     return 0;

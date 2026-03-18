@@ -292,7 +292,7 @@ UBYTE ui_draw_text_buffer_char(void) BANKED {
         // current char pointer
         ui_text_ptr = ui_text_data;
         // VRAM destination
-        if ((text_options & TEXT_OPT_PRESERVE_POS) == 0) {            
+        if ((text_options & TEXT_OPT_PRESERVE_POS) == 0) {
             if (current_text_layer == TEXT_LAYER_BKG){
                 ui_dest_base = text_render_base_addr + ((((UWORD)bkg_offset_y << 5) + 32) & 1023) + (((UWORD)bkg_offset_x + 1) & 31);
             } else {
@@ -426,7 +426,7 @@ UBYTE ui_draw_text_buffer_char(void) BANKED {
                 if (current_text_layer == TEXT_LAYER_BKG) {
                     if (((UBYTE)ui_dest_ptr >> 5) != ((UBYTE)ui_dest_base >> 5)){
                         ui_dest_ptr -= 32u;
-                    }					
+                    }
                 }
                 if (ui_print_render(*ui_text_ptr)) {
                     ui_set_tile(ui_dest_ptr, ui_prev_tile, ui_prev_tile_bank);

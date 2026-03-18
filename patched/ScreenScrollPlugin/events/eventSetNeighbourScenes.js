@@ -29,20 +29,20 @@ export const fields = [
 
 
 export const compile = (input, helpers) => {
-	const { _addComment, options, _stackPushConst, _callNative, _addNL, _stackPop } = helpers;
-	
-	_addComment("Set neighbour scene");
-	const { scenes } = options;
-	const scene = scenes.find((s) => s.id === input.sceneId);
-	_stackPushConst((input.rounded)? 1: 0);
-	_stackPushConst(toUbyteDir(input.direction));
-	_stackPushConst((scene)? `_${scene.symbol}`: 0);
-	_stackPushConst((scene)? `___bank_${scene.symbol}`: 0);
-	
-	_callNative("set_neighbour_scene"); 
-	_stackPop(4);    
-	
-	_addNL();
+    const { _addComment, options, _stackPushConst, _callNative, _addNL, _stackPop } = helpers;
+
+    _addComment("Set neighbour scene");
+    const { scenes } = options;
+    const scene = scenes.find((s) => s.id === input.sceneId);
+    _stackPushConst((input.rounded)? 1: 0);
+    _stackPushConst(toUbyteDir(input.direction));
+    _stackPushConst((scene)? `_${scene.symbol}`: 0);
+    _stackPushConst((scene)? `___bank_${scene.symbol}`: 0);
+
+    _callNative("set_neighbour_scene");
+    _stackPop(4);
+
+    _addNL();
 };
 
 const toUbyteDir = direction => {

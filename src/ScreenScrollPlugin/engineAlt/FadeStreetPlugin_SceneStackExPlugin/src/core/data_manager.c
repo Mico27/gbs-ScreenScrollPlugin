@@ -65,8 +65,8 @@ void load_init(void) BANKED {
 
 void load_bkg_tileset(const tileset_t* tiles, UBYTE bank) BANKED {
     #ifdef DISABLE_TILESET_LOAD_ON_TRANSITION
-        if (((!bank) && (!tiles)) || is_transitioning_scene) return;    
-        #else
+        if (((!bank) && (!tiles)) || is_transitioning_scene) return;
+    #else
         if ((!bank) && (!tiles)) return;
     #endif
     UWORD n_tiles = ReadBankedUWORD(&(tiles->n_tiles), bank);
@@ -336,7 +336,7 @@ UBYTE load_scene(const scene_t * scene, UBYTE bank, UBYTE init_data) BANKED {
             }
         }
     }
-    if (!vm_pop_scene_stack_state) { 
+    if (!vm_pop_scene_stack_state) {
         // Init and Load projectiles
         projectiles_init();
         if (projectiles_len  != 0) {
@@ -354,6 +354,7 @@ UBYTE load_scene(const scene_t * scene, UBYTE bank, UBYTE init_data) BANKED {
     if (triggers_len != 0) {
         MemcpyBanked(&triggers, scn.triggers.ptr, sizeof(trigger_t) * triggers_len, scn.triggers.bank);
     }
+
     if (!vm_pop_scene_stack_state) {
         scene_transition_reset();
     }

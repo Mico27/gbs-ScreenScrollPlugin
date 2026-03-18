@@ -76,16 +76,16 @@ void scene_transition_reset(void) BANKED {
     scene_transition_enabled = 0;
 }
 
-void check_transition_to_scene_collision(void) BANKED {	
-    if (scene_transition_enabled && !is_transitioning_scene && !CHK_FLAG(PLAYER.flags, ACTOR_FLAG_DISABLED)) {		
+void check_transition_to_scene_collision(void) BANKED {
+    if (scene_transition_enabled && !is_transitioning_scene && !CHK_FLAG(PLAYER.flags, ACTOR_FLAG_DISABLED)) {
         // Check for scene scroll
         if (transitioning_player_pos_y != PLAYER.pos.y)
         {
             transitioning_player_pos_y = 0x7FFF;
             if (((WORD)PLAYER.pos.y) < player_transition_top_threshold){
-                transition_to_scene_modal(DIRECTION_UP);				
+                transition_to_scene_modal(DIRECTION_UP);
                 } else if ((WORD)PLAYER.pos.y > (TILE_TO_SUBPX(image_tile_height) - player_transition_bottom_threshold)){
-                transition_to_scene_modal(DIRECTION_DOWN);		
+                transition_to_scene_modal(DIRECTION_DOWN);
             }
         }
         if (transitioning_player_pos_x != PLAYER.pos.x)
@@ -119,7 +119,7 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
         case DIRECTION_LEFT:
             scene_bank = left_scene.bank;
             scene = left_scene.ptr;
-        break;    
+        break;
     }
     if (scene_bank && scene){
         camera_settings &= ~(CAMERA_LOCK_FLAG);
@@ -129,8 +129,8 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
         uint8_t player_arrived = FALSE;
         metatile_bank = 0;
         metatile_attr_bank = 0;
-		do {
-			script_runner_update();
+        do {
+            script_runner_update();
         } while (VM_ISLOCKED());
         switch(direction){
             case DIRECTION_UP:
@@ -139,8 +139,8 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
                 }
                 scroll_y = (SUBPX_TO_PX(camera_y) - (SCREENHEIGHT >> 1)) + 8;
             break;
-            case DIRECTION_RIGHT:                
-                if (scroll_right_margin){                    
+            case DIRECTION_RIGHT:
+                if (scroll_right_margin){
                     scroll_render_cols(0, draw_scroll_y, 0, scroll_right_margin);
                 }
                 scroll_x = (SUBPX_TO_PX(camera_x) - (SCREENWIDTH >> 1)) - 8;
@@ -149,23 +149,23 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
                 if (scroll_bottom_margin){
                     scroll_render_rows(draw_scroll_x, 0, 0, scroll_bottom_margin);
                 }
-                scroll_y = (SUBPX_TO_PX(camera_y) - (SCREENHEIGHT >> 1)) - 8;	
+                scroll_y = (SUBPX_TO_PX(camera_y) - (SCREENHEIGHT >> 1)) - 8;
             break;
             case DIRECTION_LEFT:
                 scroll_x = (SUBPX_TO_PX(camera_x) - (SCREENWIDTH >> 1));
             break;
-        
+
         }
-		do {
-            script_runner_update();	
-            
+        do {
+            script_runner_update();
+
             if (!VM_ISLOCKED()){
                 camera_arrived = transition_camera_to();
                 player_arrived = transition_player_to();
             }
-            input_update();		
+            input_update();
             ui_update();
-            
+
             toggle_shadow_OAM();
             camera_update();
             scroll_update();
@@ -176,13 +176,13 @@ void transition_to_scene_modal(UBYTE direction) BANKED {
                 projectiles_render();
             }
             activate_shadow_OAM();
-            
+
             game_time++;
             wait_vbl_done();
-            
-            if (camera_arrived && player_arrived) {	
+
+            if (camera_arrived && player_arrived) {
                 camera_settings |= CAMERA_LOCK_FLAG;
-                
+
                 is_transitioning_scene = 0;
             }
         } while (is_transitioning_scene);
@@ -195,7 +195,7 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
     while (actor) {
         if (actor != &PLAYER){
             SET_FLAG(actor->flags, ACTOR_FLAG_HIDDEN);
-        }		
+        }
         actor = actor->prev;
     }
     UBYTE tmp_show_actors_on_overlay = show_actors_on_overlay;
@@ -214,7 +214,7 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
         case DIRECTION_RIGHT:
             camera_x = -TILE_TO_SUBPX(20 - scroll_right_margin) + SCROLL_CAM_X;
             PLAYER.pos.x -= TILE_TO_SUBPX(image_tile_width);
-            bkg_offset_x = (bkg_offset_x + image_tile_width) & 31; 
+            bkg_offset_x = (bkg_offset_x + image_tile_width) & 31;
             transitioning_cam_pos_x = SCROLL_CAM_X;
             transitioning_cam_pos_y = camera_y;
             transitioning_player_pos_x = PLAYER.pos.x + player_transition_right_dist;
@@ -230,7 +230,7 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
             transitioning_player_pos_x = PLAYER.pos.x;
         break;
     }
-    // kill all threads, but don't clear variables 
+    // kill all threads, but don't clear variables
     script_runner_init(FALSE);
     // reset timers on scene change
     timers_init(FALSE);
@@ -238,9 +238,9 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
     events_init(FALSE);
     // reset music events
     music_init_events(FALSE);
-    
+
     load_scene(scene, scene_bank, TRUE);
-    
+
     switch (direction){
         case DIRECTION_LEFT:
             camera_x = TILE_TO_SUBPX(image_tile_width) + SCROLL_CAM_X;
@@ -261,8 +261,8 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
             transitioning_player_pos_x = PLAYER.pos.x;
         break;
     }
-        
-    if (round_position_flags & direction){		
+
+    if (round_position_flags & direction){
         transitioning_player_pos_x = (transitioning_player_pos_x  & ~TILE_FRACTION_MASK);
         transitioning_player_pos_y = (transitioning_player_pos_y  & ~TILE_FRACTION_MASK);
         if (direction == DIRECTION_UP){
@@ -275,8 +275,8 @@ void transition_load_scene(UBYTE scene_bank, const scene_t * scene, UBYTE direct
 
 uint8_t transition_camera_to(void) BANKED {
     // Move camera towards destination
-    
-    if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) {        
+
+    if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) {
         return TRUE;
     }
     if (camera_x > transitioning_cam_pos_x) {
@@ -290,39 +290,39 @@ uint8_t transition_camera_to(void) BANKED {
         camera_x += SCROLL_CAM_SPEED;
         if (camera_x >= transitioning_cam_pos_x) {
             camera_x = transitioning_cam_pos_x;
-        }        
+        }
     }
-    
+
     if (camera_y > transitioning_cam_pos_y) {
         // Move up
         camera_y -= SCROLL_CAM_SPEED;
         if (camera_y <= transitioning_cam_pos_y) {
             camera_y = transitioning_cam_pos_y;
-        }        
+        }
         } else if (camera_y < transitioning_cam_pos_y) {
         // Move down
         camera_y += SCROLL_CAM_SPEED;
         if (camera_y >= transitioning_cam_pos_y) {
             camera_y = transitioning_cam_pos_y;
-        }      
-    }	
-    if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) { 
+        }
+    }
+    if ((camera_x == transitioning_cam_pos_x) && (camera_y == transitioning_cam_pos_y)) {
         return TRUE;
-    }	
+    }
     return FALSE;
 }
 
 
-uint8_t transition_player_to(void) BANKED {	
+uint8_t transition_player_to(void) BANKED {
     if ((PLAYER.pos.x == transitioning_player_pos_x) && (PLAYER.pos.y == transitioning_player_pos_y)) {
         return TRUE;
     }
-    
+
     UINT16 oldPlayerPosX = PLAYER.pos.x + SCROLL_CAM_X;
     UINT16 oldPlayerPosY = PLAYER.pos.y + SCROLL_CAM_Y;
     UINT16 newPlayerPosX = transitioning_player_pos_x + SCROLL_CAM_X;
     UINT16 newPlayerPosY = transitioning_player_pos_y + SCROLL_CAM_Y;
-    
+
     if (oldPlayerPosX > newPlayerPosX) {
         // Move left
         oldPlayerPosX -= SCROLL_PLAYER_SPEED;
@@ -334,26 +334,26 @@ uint8_t transition_player_to(void) BANKED {
         oldPlayerPosX += SCROLL_PLAYER_SPEED;
         if (oldPlayerPosX >= newPlayerPosX) {
             oldPlayerPosX = newPlayerPosX;
-        }        
+        }
     }
-    
+
     if (oldPlayerPosY > newPlayerPosY) {
         // Move up
         oldPlayerPosY -= SCROLL_PLAYER_SPEED;
         if (oldPlayerPosY <= newPlayerPosY) {
             oldPlayerPosY = newPlayerPosY;
-        }        
+        }
         } else if (oldPlayerPosY < newPlayerPosY) {
         // Move down
         oldPlayerPosY += SCROLL_PLAYER_SPEED;
         if (oldPlayerPosY >= newPlayerPosY) {
             oldPlayerPosY = newPlayerPosY;
-        }      
+        }
     }
-    
+
     PLAYER.pos.x = oldPlayerPosX - SCROLL_CAM_X;
     PLAYER.pos.y = oldPlayerPosY - SCROLL_CAM_Y;
-    
+
     if ((PLAYER.pos.x == transitioning_player_pos_x) && (PLAYER.pos.y == transitioning_player_pos_y)) {
         return TRUE;
     }
@@ -365,7 +365,7 @@ void set_neighbour_scene(SCRIPT_CTX * THIS) OLDCALL BANKED {
     const scene_t * scene = *(scene_t **) VM_REF_TO_PTR(FN_ARG1);
     uint8_t direction = *(uint8_t *)VM_REF_TO_PTR(FN_ARG2);
     uint8_t rounding = *(uint8_t *)VM_REF_TO_PTR(FN_ARG3);
-    enable_transition_to_scene();	
+    enable_transition_to_scene();
     if (rounding){
         round_position_flags |= direction;
     }

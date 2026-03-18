@@ -44,14 +44,16 @@ Index: src\core\collision.c
  
      UBYTE _save = CURRENT_BANK;
      UBYTE inc = UBYTE_LESS_THAN(tx_start, tx_end);
-@@ -71,9 +72,9 @@
+@@ -71,10 +72,10 @@
              tile_ptr--;
          }
          if (tile_hit_x >= image_tile_width) {
            SWITCH_ROM(_save);
 -          return COLLISION_ALL & tile_mask ? COLLISION_ALL : 0;
+-        }                
 +          return (!scene_transition_enabled && (COLLISION_ALL & tile_mask)) ? COLLISION_ALL : 0;
-         }                
++        }
      }
      SWITCH_ROM(_save);
      return 0;
+ }

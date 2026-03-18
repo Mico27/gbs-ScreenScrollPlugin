@@ -35,8 +35,13 @@ Index: include\scroll.h
  /**
   * Resets scroll settings on engine start
   */
-@@ -49,8 +55,12 @@
-  * Resets scroll and update the whole screen 
+@@ -45,12 +51,16 @@
+  */
+ void scroll_update(void) BANKED;
+ 
+ /**
+- * Resets scroll and update the whole screen 
++ * Resets scroll and update the whole screen
   */
  void scroll_repaint(void) BANKED;
  
@@ -48,3 +53,14 @@ Index: include\scroll.h
   * Get base address of window map
   */
  UINT8 * GetWinAddr(void) OLDCALL PRESERVES_REGS(b, c, h, l);
+@@ -64,9 +74,9 @@
+  * Scrolls rectangle area of VRAM filemap by base address 1 row up
+  * @param base_addr address of top-left corner
+  * @param w width of the area
+  * @param h height of the area
+- * @param fill tile id to fill the bottom row 
++ * @param fill tile id to fill the bottom row
+  */
+ void scroll_rect(UBYTE * base_addr, UBYTE w, UBYTE h, UBYTE fill) OLDCALL BANKED PRESERVES_REGS(b, c);
+ 
+ /**

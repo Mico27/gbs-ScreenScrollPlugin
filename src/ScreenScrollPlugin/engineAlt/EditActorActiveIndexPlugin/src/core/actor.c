@@ -44,7 +44,7 @@ BANKREF(ACTOR)
 const BYTE emote_offsets[] = {2, 1, 0, -1, -2, -3, -4, -5, -6, -5, -4, -3, -2, -1, 0};
 
 const metasprite_t emote_metasprite_8_16[]  = {
-    {8, 8, 0, 7}, {0, 8, 2, 7}, 
+    {8, 8, 0, 7}, {0, 8, 2, 7},
     {metasprite_end}
 };
 
@@ -69,7 +69,7 @@ UBYTE emote_timer;
 
 UBYTE allocated_sprite_tiles;
 UBYTE allocated_hardware_sprites;
-FASTUBYTE tmp_iterator_offset; 
+FASTUBYTE tmp_iterator_offset;
 UBYTE actor_sort_mode;
 
 static void deactivate_actor_impl(actor_t *actor);
@@ -94,7 +94,7 @@ void actors_update(void) BANKED {
     actor_t *actor;
     static uint8_t screen_tile16_x, screen_tile16_y, screen_tile16_x_end, screen_tile16_y_end;
     static uint8_t actor_tile16_x, actor_tile16_y;
-    static FASTUBYTE tmp_iterator; 
+    static FASTUBYTE tmp_iterator;
     static FASTUBYTE actor_flags;
 
     // Convert scroll pos to 16px tile coordinates
@@ -156,7 +156,7 @@ void actors_update(void) BANKED {
                     } else {
                         if (CHK_FLAG(actor_flags, ACTOR_FLAG_DISABLED)) {
                             CLR_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
-                        }                        
+                        }
                         deactivate_actor_impl(actor);
                     }
                 } else {
@@ -212,7 +212,7 @@ void actors_render(void) NONBANKED {
         if (CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {
            continue;
         }
-        
+
         if (CHK_FLAG(actor->flags, ACTOR_FLAG_PINNED)) {
             screen_x = SUBPX_TO_PX(actor->pos.x);
             screen_y = SUBPX_TO_PX(actor->pos.y);
@@ -245,7 +245,7 @@ void actors_render(void) NONBANKED {
 #ifdef EXCLUDE_PLAYER_FROM_FLICKER
             actor = &PLAYER;
             if (actor != actors_active_head){
-                actor = actor->prev;            
+                actor = actor->prev;
                 if (actor != actors_active_head){
                     actor->next = actors_active_head;
                     actors_active_head->prev = actor;
@@ -257,8 +257,8 @@ void actors_render(void) NONBANKED {
                 }
             }
 #else
-    
-            actor = actors_active_tail;        
+
+            actor = actors_active_tail;
             if (actor != actors_active_head){
                 actor->next = actors_active_head;
                 actors_active_head->prev = actor;
@@ -268,7 +268,7 @@ void actors_render(void) NONBANKED {
                 actor->prev = 0;
                 tmp_iterator_offset++;
             }
-#endif            
+#endif
         break;
 #endif
 #ifdef ENABLE_SORTY_FEATURE
@@ -353,7 +353,7 @@ static void activate_actor_impl(actor_t *actor) {
                 SET_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
             } else {
                 return;
-            } 
+            }
         }
     }
 

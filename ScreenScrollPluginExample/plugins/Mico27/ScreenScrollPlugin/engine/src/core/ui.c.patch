@@ -32,14 +32,12 @@ Index: src\core\ui.c
      UBYTE letter = (vwf_current_font_desc.attr & FONT_RECODE) ? ReadBankedUBYTE(vwf_current_font_desc.recode_table + (ch & vwf_current_font_desc.mask), vwf_current_font_bank) : ch;
      const UBYTE * bitmap = vwf_current_font_desc.bitmaps + letter * 16u;
      if (vwf_current_font_desc.attr & FONT_VWF) {
-@@ -290,10 +291,14 @@
-         // reset to first line
+@@ -291,9 +292,13 @@
          // current char pointer
          ui_text_ptr = ui_text_data;
          // VRAM destination
--        if ((text_options & TEXT_OPT_PRESERVE_POS) == 0) {
+         if ((text_options & TEXT_OPT_PRESERVE_POS) == 0) {
 -            ui_dest_base = text_render_base_addr + 32 + 1;                  // gotoxy(1,1)
-+        if ((text_options & TEXT_OPT_PRESERVE_POS) == 0) {            
 +            if (current_text_layer == TEXT_LAYER_BKG){
 +                ui_dest_base = text_render_base_addr + ((((UWORD)bkg_offset_y << 5) + 32) & 1023) + (((UWORD)bkg_offset_x + 1) & 31);
 +            } else {
@@ -73,7 +71,7 @@ Index: src\core\ui.c
 +                if (current_text_layer == TEXT_LAYER_BKG) {
 +                    if (((UBYTE)ui_dest_ptr >> 5) != ((UBYTE)ui_dest_base >> 5)){
 +                        ui_dest_ptr -= 32u;
-+                    }					
++                    }
 +                }
                  if (ui_print_render(*ui_text_ptr)) {
                      ui_set_tile(ui_dest_ptr, ui_prev_tile, ui_prev_tile_bank);

@@ -12,6 +12,28 @@ Index: src\core\actor.c
  #ifdef STRICT
      #include <gb/bgb_emu.h>
      #include <gb/crash_handler.h>
+@@ -36,9 +37,9 @@
+ 
+ const BYTE emote_offsets[] = {2, 1, 0, -1, -2, -3, -4, -5, -6, -5, -4, -3, -2, -1, 0};
+ 
+ const metasprite_t emote_metasprite_8_16[]  = {
+-    {8, 8, 0, 7}, {0, 8, 2, 7}, 
++    {8, 8, 0, 7}, {0, 8, 2, 7},
+     {metasprite_end}
+ };
+ 
+ const metasprite_t emote_metasprite_8_8[]  = {
+@@ -84,9 +85,9 @@
+ void actors_update(void) BANKED {
+     actor_t *actor;
+     static uint8_t screen_tile16_x, screen_tile16_y, screen_tile16_x_end, screen_tile16_y_end;
+     static uint8_t actor_tile16_x, actor_tile16_y;
+-    static uint8_t tmp_iterator; 
++    static uint8_t tmp_iterator;
+     static FASTUBYTE actor_flags;
+ 
+     // Convert scroll pos to 16px tile coordinates
+     // allowing full range of scene to be represented in 7 bits
 @@ -116,9 +117,9 @@
                  }
              }
@@ -23,7 +45,7 @@ Index: src\core\actor.c
              continue;
          }
  
-@@ -141,9 +142,9 @@
+@@ -141,14 +142,14 @@
              ) {
                  // Deactivate if offscreen
                  actor_t * prev = actor->prev;
@@ -34,7 +56,13 @@ Index: src\core\actor.c
                      } else {
                          if (CHK_FLAG(actor_flags, ACTOR_FLAG_DISABLED)) {
                              CLR_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
-@@ -197,35 +198,10 @@
+-                        }                        
++                        }
+                         deactivate_actor_impl(actor);
+                     }
+                 } else {
+                     SET_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
+@@ -197,39 +198,14 @@
  #else
      window_hide_actors = (!show_actors_on_overlay) && (WX_REG > DEVICE_WINDOW_PX_OFFSET_X);
  #endif
@@ -71,15 +99,20 @@ Index: src\core\actor.c
          if (CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {
             continue;
          }
-         
+-        
++
+         if (CHK_FLAG(actor->flags, ACTOR_FLAG_PINNED)) {
+             screen_x = SUBPX_TO_PX(actor->pos.x);
+             screen_y = SUBPX_TO_PX(actor->pos.y);
+         } else {
 @@ -271,8 +247,11 @@
      if (!CHK_FLAG(actor->flags, ACTOR_FLAG_ACTIVE)) return;
      if (actor == &PLAYER) return;
      CLR_FLAG(actor->flags, ACTOR_FLAG_ACTIVE);
      DL_REMOVE_ITEM(actors_active_head, actor);
-+	if (actors_active_tail == actor){
-+		actors_active_tail = actor->prev;
-+	}
++    if (actors_active_tail == actor){
++        actors_active_tail = actor->prev;
++    }
      DL_PUSH_HEAD(actors_inactive_head, actor);
      if ((actor->hscript_update & SCRIPT_TERMINATED) == 0) {
          script_terminate(actor->hscript_update);
@@ -95,7 +128,7 @@ Index: src\core\actor.c
          UBYTE actor_tile16_y = SUBPX_TO_TILE16(actor->pos.y) + ACTOR_BOUNDS_TILE16_HALF + TILE16_OFFSET;
          UBYTE screen_tile16_x = PX_TO_TILE16(draw_scroll_x) + TILE16_OFFSET;
          UBYTE screen_tile16_x_end = screen_tile16_x + ACTOR_BOUNDS_TILE16 + SCREEN_TILE16_W;
-@@ -317,9 +296,9 @@
+@@ -317,13 +296,13 @@
              (actor_tile16_y < screen_tile16_y) ||
              // Actor top edge > screen bottom edge
              (actor_tile16_y > screen_tile16_y_end)
@@ -105,7 +138,12 @@ Index: src\core\actor.c
                  SET_FLAG(actor->flags, ACTOR_FLAG_DISABLED);
              } else {
                  return;
-             } 
+-            } 
++            }
+         }
+     }
+ 
+     SET_FLAG(actor->flags, ACTOR_FLAG_ACTIVE);
 @@ -450,17 +429,17 @@
      upoint16_t offset;
      offset.x = PLAYER.pos.x;

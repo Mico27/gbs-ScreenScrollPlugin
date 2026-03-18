@@ -27,9 +27,9 @@ void camera_init(void) BANKED {
 }
 
 void camera_update(void) BANKED {
-	if (is_transitioning_scene){
-		return;
-	}
+    if (is_transitioning_scene){
+        return;
+    }
     if (camera_settings & CAMERA_LOCK_X_FLAG)
     {
         UWORD target_pos = PLAYER.pos.x + CAMERA_FIXED_OFFSET_X - PX_TO_SUBPX(camera_offset_x);
