@@ -2,6 +2,13 @@ Index: src\core\data_manager.c
 ===================================================================
 --- src\core\data_manager.c
 +++ src\core\data_manager.c
+@@ -1,5 +1,5 @@
+-#pragma bank 255
++﻿#pragma bank 255
+ 
+ #include <string.h>
+ 
+ #include "system.h"
 @@ -14,8 +14,10 @@
  #include "ui.h"
  #include "palette.h"
@@ -42,7 +49,7 @@ Index: src\core\data_manager.c
      // Load background + tiles
      load_background(scn.background.ptr, scn.background.bank);
  
-@@ -225,19 +232,27 @@
+@@ -225,20 +232,27 @@
          scene_LCD_type = LCD_parallax;
      }
  
@@ -51,6 +58,7 @@ Index: src\core\data_manager.c
 +    scroll_x_max = ((image_width < SCREENWIDTH)? 0: scn.scroll_bounds.right + TILE_TO_PX(scroll_right_margin));
      scroll_y_min = scn.scroll_bounds.top;
 -    scroll_y_max = scn.scroll_bounds.bottom;
+-    scroll_offset_x = scroll_offset_y = 0;
 +    scroll_y_max = ((image_height < SCREENHEIGHT)? 0: scn.scroll_bounds.bottom + TILE_TO_PX(scroll_bottom_margin));
  
      if (scene_type != SCENE_TYPE_LOGO) {
@@ -77,7 +85,7 @@ Index: src\core\data_manager.c
          // no player on logo, but still some little amount of actors may be present
          PLAYER.base_tile = allocated_sprite_tiles = 0x68;
          PLAYER.sprite = spritesheet_none_far;
-@@ -331,9 +346,12 @@
+@@ -332,9 +346,12 @@
      if (triggers_len != 0) {
          MemcpyBanked(&triggers, scn.triggers.ptr, sizeof(trigger_t) * triggers_len, scn.triggers.bank);
      }

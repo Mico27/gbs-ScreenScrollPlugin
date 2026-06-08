@@ -2,6 +2,13 @@ Index: src\core\vm_ui.c
 ===================================================================
 --- src\core\vm_ui.c
 +++ src\core\vm_ui.c
+@@ -1,5 +1,5 @@
+-#pragma bank 255
++﻿#pragma bank 255
+ 
+ #include <string.h>
+ #include <stdlib.h>
+ 
 @@ -140,8 +140,9 @@
  
  // switch text rendering to window or background
