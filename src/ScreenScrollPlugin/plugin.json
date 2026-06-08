@@ -1,0 +1,11 @@
+{
+  "type": "enginePlugin",
+  "name": "Screen Scroll Plugin",
+  "author": "Mico27",
+  "url": "https://github.com/Mico27/gbs-ScreenScrollPlugin",
+  "description": "Adds the ability to scroll the screen between scenes.",
+  "license": "MIT",
+  "version": "4.3.0",
+  "gbsVersion": ">=4.3.0",
+  "order": -13
+}
