@@ -22,6 +22,26 @@
           "runtimeOnly": true
         },
         {
+          "key": "scene_transition_enabled",
+          "label": "Scene transition enabled",
+          "description": "Scene transition enabled",
+          "group": "Screen Scroll",
+          "type": "number",
+          "cType": "UBYTE",
+          "defaultValue": 0,
+          "runtimeOnly": true
+        },
+        {
+          "key": "is_transitioning_scene",
+          "label": "Is scene transitioning",
+          "description": "Is scene transitioning",
+          "group": "Screen Scroll",
+          "type": "number",
+          "cType": "UBYTE",
+          "defaultValue": 0,
+          "runtimeOnly": true
+        },
+        {
           "key": "scroll_right_margin",
           "label": "right side margin for huds aligned to the right",
           "description": "right side margin for huds aligned to the right",
