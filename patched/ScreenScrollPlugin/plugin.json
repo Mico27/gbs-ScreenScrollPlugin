@@ -7,5 +7,23 @@
   "license": "MIT",
   "version": "4.3.0",
   "gbsVersion": ">=4.3.0",
-  "order": -13
+  "order": -13,
+  "engineAltRules": [
+    {
+      "when": {
+        "additionalPlugins": [
+          "Mico27/ContinuousScenePlugin"
+        ]
+      },
+      "use": "Cont"
+    },
+    {
+      "when": {
+        "additionalPlugins": [
+          "ContinuousScenePlugin"
+        ]
+      },
+      "use": "Cont"
+    }
+  ]
 }
