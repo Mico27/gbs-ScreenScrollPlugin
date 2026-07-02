@@ -4,7 +4,7 @@
 
 A GB Studio engine plugin that enables seamless screen-scrolling transitions between scenes, similar to the overworld navigation in *The Legend of Zelda: Link's Awakening*. When the player walks off the edge of a scene, the screen scrolls in that direction and loads the neighbouring scene without a fade. The player and camera glide smoothly across the boundary, and the game loop stays fully active throughout.
 
-All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP) work with the plugin. Two events are added to the **Scene** group: **Set Neighbour Scene** and **Assign current scene scroll offset to Variable**.
+All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP) work with the plugin. Three events are added to the **Scene** group: **Set Neighbour Scene**, **Auto Connect Neighbour Scenes** and **Assign current scene scroll offset to Variable**.
 
 ---
 
@@ -113,7 +113,7 @@ The `CAMERA_LOCK_FLAG` is cleared at transition start and restored once both the
 
 ## Events Reference
 
-Both events are in the **Scene** group.
+All events are in the **Scene** group.
 
 ---
 
@@ -128,6 +128,29 @@ Registers a scene as the neighbour in a given direction and enables boundary-cro
 | Scene | The scene to scroll to when the player exits in the chosen direction. |
 | Direction of scroll | Up, Down, Left, or Right — the direction the screen will scroll when the boundary is crossed. |
 | Round position to nearest tile | Snaps the player's position to the nearest tile grid after the transition completes. Recommended for Top-Down scenes to prevent sub-tile misalignment. |
+
+---
+
+### Auto Connect Neighbour Scenes
+
+**`EVENT_AUTO_CONNECT_NEIGHBOUR_SCENE`**
+
+Automatically wires up **Set Neighbour Scene** calls for a whole group of scenes at **compile time**, based on how the scenes are laid out in the GB Studio editor. Place this event once, in the **On Init** script of a dedicated empty "compiler" scene — the event itself emits no runtime code where it is placed.
+
+> **Important:** scene scripts are compiled in project scene order, and this event can only inject into scenes that are compiled *after* the scene containing it. The scene holding the event must therefore be the **first scene of the project** (it is first when it is the first scene ever added; on an existing project, edit the scene's `.gbsres` file and set its `"_index"` lower than every other scene's, e.g. `-1`). For the same reason the hosting scene itself never receives auto-connections — use a scene that is not part of the connected map.
+
+For every scene whose **GBVM symbol** starts with the given prefix (set the symbol per scene under the scene's settings), the event looks for other matching scenes whose edges touch it in the editor and injects a script at the start of that scene's On Init that registers each detected neighbour via `set_neighbour_scene`. Scene positions are compared in tiles (editor pixel position ÷ 8).
+
+Because the scroll transition preserves the player's position along the shared edge with no offset correction, **two scenes are only connected when their edges are exactly aligned**: left/right neighbours must have the same top edge, up/down neighbours the same left edge. Scenes that merely overlap at an offset are skipped.
+
+| Field | Description |
+|-------|-------------|
+| Scene data symbol prefix | Only scenes whose GBVM symbol starts with this prefix are considered for connection. Leave empty to match every scene. |
+| Loop Horizontally | Additionally connects scenes on the left-most map edge to aligned scenes on the right-most map edge (wrap-around world). |
+| Loop Vertically | Additionally connects scenes on the top-most map edge to aligned scenes on the bottom-most map edge. |
+| Round position to nearest tile | Applies the tile-snap flag to every generated connection. Recommended for Top-Down scenes. |
+
+The usual plugin restrictions still apply to auto-connected scenes: shared common tileset, matching edge dimensions, and a maximum scene size of 128×128 tiles.
 
 ---
 
