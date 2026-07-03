@@ -17,6 +17,7 @@ All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP
 5. [Events Reference](#events-reference)
 6. [Engine Fields and Settings](#engine-fields-and-settings)
 7. [Inner Workings](#inner-workings)
+8. [Memory Footprint](#memory-footprint)
 
 ---
 
@@ -274,3 +275,18 @@ bkg_scroll_y = draw_scroll_y + TILE_TO_PX(bkg_offset_y)
 ```
 
 The `bkg_offset` values shift the VRAM map origin so that tile data written into a specific VRAM ring-buffer slot always appears at the correct screen position, regardless of how many transitions have occurred. Without this accumulation, consecutive scroll transitions in the same direction would progressively misalign the background.
+
+---
+
+## Memory Footprint
+
+Measured against the stock GB Studio **4.3.0-e1** engine (per-file SDCC compile with GB Studio's build flags, default engine settings). Values are the plugin's *delta* versus the stock engine; DMG build, with CGB noted where it differs. ROM cost lands in banked ROM (GB Studio's autobanker spreads it across switchable banks); using the plugin's events additionally compiles a few bytes of GBVM script per call into your project's script banks.
+
+| | Cost |
+|---|---|
+| WRAM | +46 bytes |
+| ROM | +3,550 bytes (DMG) / +3,575 bytes (CGB) |
+
+- **WRAM:** 46 bytes, mostly scene-transition scratch state in `scene_transition.c` (+42).
+- **Engine WRAM headroom:** the stock GB Studio 4.3.0 engine leaves about **854 bytes** of WRAM free (usable engine WRAM is 7,776 bytes at 0xC0A0–0xDF00; the stock engine uses 6,922 bytes). With this plugin installed roughly **808 bytes** remain. This figure does not depend on how many global variables your project defines: the script memory array has a fixed size of VM_HEAP_SIZE + (VM_MAX_CONTEXTS × VM_CONTEXT_STACK_SIZE) words — 768 + 16 × 64 = 1,792 words (3,584 bytes) with stock engine settings.
+- **SRAM:** not used.
