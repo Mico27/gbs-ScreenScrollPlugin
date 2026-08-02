@@ -1,7 +1,7 @@
-Index: include\collision.h
+Index: include/collision.h
 ===================================================================
---- include\collision.h
-+++ include\collision.h
+--- include/collision.h
++++ include/collision.h
 @@ -20,8 +20,10 @@
  
  extern UBYTE tile_hit_x;

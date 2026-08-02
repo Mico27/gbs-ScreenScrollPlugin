@@ -1,7 +1,7 @@
-Index: src\core\actor.c
+Index: src/core/actor.c
 ===================================================================
---- src\core\actor.c
-+++ src\core\actor.c
+--- src/core/actor.c
++++ src/core/actor.c
 @@ -16,8 +16,9 @@
  #include "collision.h"
  #include "ui.h"

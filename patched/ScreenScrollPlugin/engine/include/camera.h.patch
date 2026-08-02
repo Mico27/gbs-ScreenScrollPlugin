@@ -1,7 +1,7 @@
-Index: include\camera.h
+Index: include/camera.h
 ===================================================================
---- include\camera.h
-+++ include\camera.h
+--- include/camera.h
++++ include/camera.h
 @@ -16,12 +16,12 @@
  #define CAMERA_LOCK_Y_MIN_FLAG 0x10
  #define CAMERA_LOCK_Y_MAX_FLAG 0x20

@@ -290,3 +290,46 @@ Measured against the stock GB Studio **4.3.0-e1** engine (per-file SDCC compile 
 - **WRAM:** 46 bytes, mostly scene-transition scratch state in `scene_transition.c` (+42).
 - **Engine WRAM headroom:** the stock GB Studio 4.3.0 engine leaves about **854 bytes** of WRAM free (usable engine WRAM is 7,776 bytes at 0xC0A0–0xDF00; the stock engine uses 6,922 bytes). With this plugin installed roughly **808 bytes** remain. This figure does not depend on how many global variables your project defines: the script memory array has a fixed size of VM_HEAP_SIZE + (VM_MAX_CONTEXTS × VM_CONTEXT_STACK_SIZE) words — 768 + 16 × 64 = 1,792 words (3,584 bytes) with stock engine settings.
 - **SRAM:** not used.
+
+---
+
+<!-- BANK0:BEGIN -->
+## Bank 0 (HOME) Usage
+
+Bank 0 is the 16 KB non-switchable ROM bank that the GB Studio engine core,
+the interrupt handlers and the GBDK runtime all share. Banked ROM is cheap
+(add another bank), bank 0 is not, so it is usually the first thing a project
+runs out of.
+
+| | Bytes |
+|---|---|
+| Bank 0 used by this plugin | **-152** |
+| Bank 0 free with this plugin installed | **1,603** of 16,384 (90% used) |
+
+**This plugin gives bank 0 space back.** Its replacements for stock engine
+files compile smaller than the originals, freeing 152 bytes.
+
+| Module | This plugin | Stock engine | Bank 0 cost |
+|---|---|---|---|
+| `actor.c` | 669 | 871 | -202 |
+| `collision.c` | 431 | 401 | +30 |
+| `scroll.c` | 306 | 286 | +20 |
+
+Modules that replace or patch a stock engine file only cost the *difference*:
+the stock version's bank 0 bytes were being spent anyway.
+
+<details><summary>How this was measured</summary>
+
+GB Studio 4.3.2, DMG target, default engine settings. Each module's bank 0
+contribution is the `A _HOME size` record that SDCC writes into its `.rel`
+object, summed over the engine sources this plugin provides. Stock sizes come
+from building projects whose only plugin ships no engine C, so every module in
+them is the untouched engine; two such builds were compared and agreed on all
+73 shared modules.
+
+The "free" figure is a stock project with this plugin and nothing else. Your
+own number will differ: other plugins, and any engine settings that change what
+the core compiles, move it independently of this plugin.
+
+</details>
+<!-- BANK0:END -->

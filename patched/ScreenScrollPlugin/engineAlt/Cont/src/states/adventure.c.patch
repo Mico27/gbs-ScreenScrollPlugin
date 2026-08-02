@@ -1,7 +1,7 @@
-Index: src\states\adventure.c
+Index: src/states/adventure.c
 ===================================================================
---- src\states\adventure.c
-+++ src\states\adventure.c
+--- src/states/adventure.c
++++ src/states/adventure.c
 @@ -657,9 +657,8 @@
                          }
                      }

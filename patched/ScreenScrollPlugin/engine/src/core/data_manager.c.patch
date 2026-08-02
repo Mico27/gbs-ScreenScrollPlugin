@@ -1,7 +1,7 @@
-Index: src\core\data_manager.c
+Index: src/core/data_manager.c
 ===================================================================
---- src\core\data_manager.c
-+++ src\core\data_manager.c
+--- src/core/data_manager.c
++++ src/core/data_manager.c
 @@ -1,5 +1,5 @@
 -#pragma bank 255
 +﻿#pragma bank 255

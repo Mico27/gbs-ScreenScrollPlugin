@@ -1,7 +1,7 @@
-Index: src\core\ui.c
+Index: src/core/ui.c
 ===================================================================
---- src\core\ui.c
-+++ src\core\ui.c
+--- src/core/ui.c
++++ src/core/ui.c
 @@ -1,5 +1,5 @@
 -// must be in the same bank with ui_a.s
 +﻿// must be in the same bank with ui_a.s

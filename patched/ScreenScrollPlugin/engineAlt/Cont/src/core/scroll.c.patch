@@ -1,7 +1,7 @@
-Index: src\core\scroll.c
+Index: src/core/scroll.c
 ===================================================================
---- src\core\scroll.c
-+++ src\core\scroll.c
+--- src/core/scroll.c
++++ src/core/scroll.c
 @@ -12,8 +12,10 @@
  #include "math.h"
  #include "fade_manager.h"

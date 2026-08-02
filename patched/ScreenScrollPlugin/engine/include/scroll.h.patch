@@ -1,7 +1,7 @@
-Index: include\scroll.h
+Index: include/scroll.h
 ===================================================================
---- include\scroll.h
-+++ include\scroll.h
+--- include/scroll.h
++++ include/scroll.h
 @@ -8,12 +8,12 @@
  
  #define SCROLL_BANK 1
