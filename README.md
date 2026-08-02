@@ -12,12 +12,10 @@ All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP
 
 1. [Concepts](#concepts)
 2. [Project Setup](#project-setup)
-3. [HUD Margins](#hud-margins)
-4. [Technicalities and Restrictions](#technicalities-and-restrictions)
-5. [Events Reference](#events-reference)
-6. [Engine Fields and Settings](#engine-fields-and-settings)
-7. [Inner Workings](#inner-workings)
-8. [Memory Footprint](#memory-footprint)
+3. [Size Limits and Restrictions](#size-limits-and-restrictions)
+4. [Events Reference](#events-reference)
+5. [Engine Settings](#engine-settings)
+6. [Memory Footprint](#memory-footprint)
 
 ---
 
@@ -68,7 +66,7 @@ https://github.com/user-attachments/assets/9b7bf82a-9763-4abd-8066-53a8d565579c
 
 ---
 
-## HUD Margins
+### HUD Margins
 
 If your game displays a fixed HUD on the overlay/window layer, the plugin needs to know its size so the scroll boundaries and camera calculations account for the reduced playfield area.
 
@@ -82,7 +80,7 @@ The **Bottom margin** shrinks the effective scene height used for scroll boundar
 
 ---
 
-## Technicalities and Restrictions
+## Size Limits and Restrictions
 
 ### Maximum Scene Size is Halved
 
@@ -98,11 +96,11 @@ Both connecting scenes must use the same common tileset. Because no tileset relo
 
 ### Scripts Are Killed on Transition
 
-When a transition begins, `script_runner_init(FALSE)` is called, which terminates all running script contexts in the current scene **without** clearing variables. Timers, input events, and music events are also reset (`timers_init(FALSE)`, `events_init(FALSE)`, `music_init_events(FALSE)`). The new scene's init scripts run after the scene loads.
+When a transition begins, every running script in the current scene is terminated — **without** clearing variables. Timers, input events and music events are reset too. The new scene's init scripts run once the scene has loaded.
 
 ### Camera Is Unlocked During Transition
 
-The `CAMERA_LOCK_FLAG` is cleared at transition start and restored once both the camera and player have reached their target positions. The `camera_update` function returns immediately while `is_transitioning_scene` is non-zero, leaving camera movement entirely to the `transition_camera_to` step-interpolation function.
+The camera lock is cleared at the start of a transition and restored once both the camera and the player have reached their target positions. Normal camera following is suspended for the duration, so the transition owns the camera.
 
 ### Player Sprite and Tileset Loading
 
@@ -168,7 +166,7 @@ Reads the current accumulated background offset (`bkg_offset_x`, `bkg_offset_y`)
 
 ---
 
-## Engine Fields and Settings
+## Engine Settings
 
 These settings are found under **Settings → Engine Fields → Screen Scroll**.
 
@@ -223,61 +221,6 @@ These are read-only engine fields accessible via **Engine Field Value** in scrip
 
 ---
 
-## Inner Workings
-
-### Boundary Detection (`check_transition_to_scene_collision`)
-
-Each frame, the state update loop calls `check_transition_to_scene_collision` when `scene_transition_enabled` is set and no transition is already in progress. It compares the player's current X and Y positions against four thresholds:
-
-- Left: `PLAYER.pos.x < player_transition_left_threshold`
-- Right: `PLAYER.pos.x > TILE_TO_SUBPX(image_tile_width) - player_transition_right_threshold`
-- Top: `PLAYER.pos.y < player_transition_top_threshold`
-- Bottom: `PLAYER.pos.y > TILE_TO_SUBPX(image_tile_height) - player_transition_bottom_threshold`
-
-A position-change guard (`transitioning_player_pos_x/y != PLAYER.pos.x/y`) prevents the same crossing from triggering multiple frames in a row. When a threshold is crossed and the corresponding `far_ptr_t` has a non-zero bank, `transition_to_scene_modal` is called with the matching direction flag.
-
-### Scene Load Phase (`transition_load_scene`)
-
-Before loading the new scene this function:
-
-1. Hides all active actors (except the player) and moves them to the overlay layer temporarily.
-2. Clears all active projectiles.
-3. Renders one final OAM frame so sprites disappear cleanly.
-4. Adjusts `camera_x`/`camera_y`, `PLAYER.pos`, and `bkg_offset_x`/`bkg_offset_y` for the scroll direction:
-   - **Right scroll**: camera jumps left by one screen width; player X is decremented by the scene width; `bkg_offset_x` is incremented by the scene tile width.
-   - **Down scroll**: camera jumps up by one screen height; player Y is decremented by the scene height; `bkg_offset_y` is incremented.
-   - **Left/Up**: The new scene is loaded first, then the camera and player are offset in the opposite direction and `bkg_offset` is decremented.
-5. Kills all running scripts (`script_runner_init(FALSE)`) and resets timers and event handlers.
-6. Calls `load_scene` for the new scene. Because the tile offsets were pre-adjusted and `is_transitioning_scene` is set, `scroll_reset` inside `scroll_init` skips clearing `scroll_x/y` and `bkg_offset_x/y`, preserving the cross-scene continuity.
-7. If a position-rounding flag is set for the direction, the target player position is snapped to the nearest tile boundary (clearing the lower 8 bits and optionally adding one tile for Up/Left transitions).
-
-### Scroll Animation Phase (`transition_to_scene_modal`)
-
-After `transition_load_scene` returns, the function enters a loop that runs every frame:
-
-1. `script_runner_update` ticks the new scene's init scripts until the VM is no longer locked.
-2. `transition_camera_to` steps `camera_x`/`camera_y` toward `transitioning_cam_pos_x/y` by up to `SCROLL_CAM_SPEED` (128 sub-pixels) per frame.
-3. `transition_player_to` steps the player's position toward `transitioning_player_pos_x/y` by up to `SCROLL_PLAYER_SPEED` (16 sub-pixels) per frame.
-4. The normal game-loop updates (`camera_update`, `scroll_update`, `actors_update`, OAM, VBlank) all run. Because `is_transitioning_scene` is non-zero, `camera_update` is skipped (the camera is driven by `transition_camera_to`) and `scroll_update` bypasses its scroll-clamp logic for the transition axis, allowing the viewport to travel beyond the normal scene bounds.
-5. When both `transition_camera_to` and `transition_player_to` return `TRUE`, `CAMERA_LOCK_FLAG` is restored and `is_transitioning_scene` is cleared, ending the loop and returning control to the standard game loop.
-
-### Scroll Margin Rendering
-
-At the start of the animation phase, before entering the loop, any HUD margin rows/columns are rendered into the correct VRAM positions. For example, on a downward scroll, `scroll_render_rows` fills the top `scroll_bottom_margin` rows of the new viewport so the HUD area is correctly populated from the start of the slide.
-
-### `bkg_offset` and Tile Alignment
-
-`bkg_scroll_x` and `bkg_scroll_y` (the actual SCX/SCY values written to hardware) are computed each frame as:
-
-```
-bkg_scroll_x = draw_scroll_x + TILE_TO_PX(bkg_offset_x)
-bkg_scroll_y = draw_scroll_y + TILE_TO_PX(bkg_offset_y)
-```
-
-The `bkg_offset` values shift the VRAM map origin so that tile data written into a specific VRAM ring-buffer slot always appears at the correct screen position, regardless of how many transitions have occurred. Without this accumulation, consecutive scroll transitions in the same direction would progressively misalign the background.
-
----
-
 ## Memory Footprint
 
 Measured against the stock GB Studio **4.3.0-e1** engine (per-file SDCC compile with GB Studio's build flags, default engine settings). Values are the plugin's *delta* versus the stock engine; DMG build, with CGB noted where it differs. ROM cost lands in banked ROM (GB Studio's autobanker spreads it across switchable banks); using the plugin's events additionally compiles a few bytes of GBVM script per call into your project's script banks.
@@ -287,7 +230,7 @@ Measured against the stock GB Studio **4.3.0-e1** engine (per-file SDCC compile 
 | WRAM | +46 bytes |
 | ROM | +3,550 bytes (DMG) / +3,575 bytes (CGB) |
 
-- **WRAM:** 46 bytes, mostly scene-transition scratch state in `scene_transition.c` (+42).
+- **WRAM:** 46 bytes, mostly scene-transition scratch state.
 - **Engine WRAM headroom:** the stock GB Studio 4.3.0 engine leaves about **854 bytes** of WRAM free (usable engine WRAM is 7,776 bytes at 0xC0A0–0xDF00; the stock engine uses 6,922 bytes). With this plugin installed roughly **808 bytes** remain. This figure does not depend on how many global variables your project defines: the script memory array has a fixed size of VM_HEAP_SIZE + (VM_MAX_CONTEXTS × VM_CONTEXT_STACK_SIZE) words — 768 + 16 × 64 = 1,792 words (3,584 bytes) with stock engine settings.
 - **SRAM:** not used.
 
