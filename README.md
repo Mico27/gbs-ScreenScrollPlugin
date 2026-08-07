@@ -241,13 +241,11 @@ ceiling rather than a recipe: you keep whatever your game actually uses.
 
 <details><summary>How these were measured</summary>
 
-GB Studio 4.3.0-e1. Each of this plugin's `engine/src/**/*.c` files was compiled with
-the toolchain and flags GB Studio itself uses (`lcc -msm83:gb
--Wf--max-allocs-per-node 3000 -DHUGE_TRACKER -DRUMBLE_ENABLE=0x08u`) against a merged
-include tree, once with every setting at its default and once per setting toggled. The
-SDCC object files' area records were then diffed: `_HOME` is bank 0,
-`_DATA`/`_INITIALIZED`/`_BSS` are WRAM, and `_CODE*`/`_CONST`/`_LIT`/`_INITIALIZER` are
-banked ROM.
+GB Studio 4.3.0-e1. This plugin's `engine/src/**/*.c` was compiled with the
+toolchain and flags GB Studio itself uses (`lcc -msm83:gb -Wf--max-allocs-per-node 3000
+-DHUGE_TRACKER -DRUMBLE_ENABLE=0x08u`) against a merged include tree, and the SDCC object
+files' area records were read: `_HOME` is bank 0, `_DATA`/`_INITIALIZED`/`_BSS` are WRAM,
+and `_CODE*`/`_CONST`/`_LIT`/`_INITIALIZER` are banked ROM.
 
 Two caveats. Only this plugin's own engine sources are measured, so a setting that also
 changes a struct shared with stock engine files can move a few more bytes in files the
