@@ -311,3 +311,34 @@ the core compiles, move it independently of this plugin.
 
 </details>
 <!-- BANK0:END -->
+
+## Changelog
+
+Grouped by the date each change was merged into the official
+[gb-studio-plugins](https://github.com/gb-studio-dev/gb-studio-plugins) repository.
+
+Only bug fixes, new features and feature changes are listed. Engine version
+bumps, patch regeneration, packaging fixes and documentation edits are omitted.
+
+### 2026-08-02
+
+- Implemented the ContinuousScene plugin's auto-connect event variant for ScreenScroll.
+
+### 2026-06-28
+
+- Added ContinuousScenePlugin compatibility.
+
+### 2026-06-14
+
+- Added custom script parameter / stack support to the events.
+
+### 2026-06-08
+
+First published in the official plugin repository. This entry covers everything
+developed since the plugin's standalone release in July 2024:
+
+- New event to store the scroll offset in a variable, for tilemap editing.
+- Script lock support.
+- Refined the `#define` settings for the transition threshold and distance.
+- Exposed additional engine fields.
+- Fixes: normal scene load after a scene scroll, and the small blip when scrolling up with a HUD margin.
