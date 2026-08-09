@@ -16,6 +16,8 @@ All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP
 4. [Events Reference](#events-reference)
 5. [Engine Settings](#engine-settings)
 6. [Memory Footprint](#memory-footprint)
+7. [Bank 0 (HOME) Usage](#bank-0-home-usage)
+8. [Changelog](#changelog)
 
 ---
 
