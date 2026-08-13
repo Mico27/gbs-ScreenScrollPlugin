@@ -5,28 +5,10 @@
   "url": "https://github.com/Mico27/gbs-ScreenScrollPlugin",
   "description": "Adds the ability to scroll the screen between scenes.",
   "license": "MIT",
-  "version": "4.3.4",
+  "version": "4.3.5",
   "gbsVersion": ">=4.3.0",
   "order": -13,
   "mutuallyExclusive": [
     "ContinuousScenePlugin"
-  ],
-  "engineAltRules": [
-    {
-      "when": {
-        "additionalPlugins": [
-          "Mico27/ContinuousScenePlugin"
-        ]
-      },
-      "use": "Cont"
-    },
-    {
-      "when": {
-        "additionalPlugins": [
-          "ContinuousScenePlugin"
-        ]
-      },
-      "use": "Cont"
-    }
   ]
 }

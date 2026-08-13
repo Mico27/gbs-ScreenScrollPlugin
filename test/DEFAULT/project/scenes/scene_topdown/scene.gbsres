@@ -1,0 +1,23 @@
+{
+  "_resourceType": "scene",
+  "id": "25727a35-7be8-4610-8293-579f4647b8e0",
+  "_index": 0,
+  "name": "TOPDOWN",
+  "backgroundId": "1e5f9d6a-bdbc-43e6-8c34-22f5bb5dea05",
+  "tilesetId": "",
+  "width": 20,
+  "height": 18,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_topdown",
+  "x": 100,
+  "y": 100,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

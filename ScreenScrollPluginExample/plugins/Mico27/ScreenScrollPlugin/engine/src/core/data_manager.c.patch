@@ -2,13 +2,6 @@ Index: src/core/data_manager.c
 ===================================================================
 --- src/core/data_manager.c
 +++ src/core/data_manager.c
-@@ -1,5 +1,5 @@
--#pragma bank 255
-+﻿#pragma bank 255
- 
- #include <string.h>
- 
- #include "system.h"
 @@ -14,8 +14,10 @@
  #include "ui.h"
  #include "palette.h"

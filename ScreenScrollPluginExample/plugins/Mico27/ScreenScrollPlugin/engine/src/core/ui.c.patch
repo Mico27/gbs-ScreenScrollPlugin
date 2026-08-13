@@ -2,13 +2,6 @@ Index: src/core/ui.c
 ===================================================================
 --- src/core/ui.c
 +++ src/core/ui.c
-@@ -1,5 +1,5 @@
--// must be in the same bank with ui_a.s
-+﻿// must be in the same bank with ui_a.s
- #pragma bank 1
- 
- #include <string.h>
- 
 @@ -34,8 +34,9 @@
  UBYTE win_speed;
  

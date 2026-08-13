@@ -1,0 +1,8 @@
+{
+  "_resourceType": "project",
+  "name": "DEFAULT",
+  "author": "micka",
+  "notes": "ScreenScrollPlugin on its own, every engine setting at its default.",
+  "_version": "4.2.0",
+  "_release": "10"
+}
