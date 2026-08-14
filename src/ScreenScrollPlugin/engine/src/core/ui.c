@@ -434,15 +434,14 @@ UBYTE ui_draw_text_buffer_char(void) BANKED {
                 ui_text_ptr++;
                 // fall down to default
             default:
-                //warp around of vram instead of next line on background
-                if (current_text_layer == TEXT_LAYER_BKG) {
-                    if (((UBYTE)ui_dest_ptr >> 5) != ((UBYTE)ui_dest_base >> 5)){
-                        ui_dest_ptr -= 32u;
-                    }
-                }
                 if (ui_print_render(*ui_text_ptr)) {
                     ui_set_tile(ui_dest_ptr, ui_prev_tile, ui_prev_tile_bank);
-                    if (vwf_direction == UI_PRINT_LEFTTORIGHT)  ui_dest_ptr++; else ui_dest_ptr--;
+                    // tilemap rows are 32 tiles wide and wrap around, so the cell that follows
+                    // column 31 is column 0 of the same row: step the column only and keep the
+                    // row address bits, whichever direction the text is printed in
+                    UBYTE col = (UBYTE)(UWORD)ui_dest_ptr;
+                    if (vwf_direction == UI_PRINT_LEFTTORIGHT) col++; else col--;
+                    ui_dest_ptr = (UBYTE *)(((UWORD)ui_dest_ptr & 0xFFE0u) | (col & 0x1Fu));
                 }
                 if (vwf_current_offset) ui_set_tile(ui_dest_ptr, ui_current_tile, ui_current_tile_bank);
                 ui_text_ptr++;
