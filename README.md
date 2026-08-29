@@ -1,10 +1,12 @@
 # gbs-ScreenScrollPlugin
 
-**Version 4.3.0 — Requires GB Studio ≥ 4.3.0**
+**Version 4.3.0. Requires GB Studio 4.3.0 or newer.**
 
-A GB Studio engine plugin that enables seamless screen-scrolling transitions between scenes, similar to the overworld navigation in *The Legend of Zelda: Link's Awakening*. When the player walks off the edge of a scene, the screen scrolls in that direction and loads the neighbouring scene without a fade. The player and camera glide smoothly across the boundary, and the game loop stays fully active throughout.
+Scrolls from one scene into the next when the player walks off the edge, the way The Legend of Zelda: Link's Awakening moves around its overworld. No fade, no loading pause. The screen slides, the new scene comes in behind it, and the player keeps walking.
 
-All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP) work with the plugin. Three events are added to the **Scene** group: **Set Neighbour Scene**, **Auto Connect Neighbour Scenes** and **Assign current scene scroll offset to Variable**.
+That turns a project made of separate rooms into one continuous world, which is what an overworld map, a dungeon of connected rooms or a long side-scrolling level wants.
+
+It works in Top-Down, Platformer, Adventure, Point and Click and Shmup scenes. Three events are added to the **Scene** group: **Set Neighbour Scene**, **Auto Connect Neighbour Scenes** and **Assign current scene scroll offset to Variable**.
 
 ---
 
@@ -15,9 +17,10 @@ All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP
 3. [Size Limits and Restrictions](#size-limits-and-restrictions)
 4. [Events Reference](#events-reference)
 5. [Engine Settings](#engine-settings)
-6. [Memory Footprint](#memory-footprint)
-7. [Bank 0 (HOME) Usage](#bank-0-home-usage)
-8. [Changelog](#changelog)
+6. [FAQ](#faq)
+7. [Memory Footprint](#memory-footprint)
+8. [Bank 0 (HOME) Usage](#bank-0-home-usage)
+9. [Changelog](#changelog)
 
 ---
 
@@ -25,13 +28,13 @@ All supported scene types (Top-Down, Platformer, Adventure, Point & Click, SHMUP
 
 ### How the Scroll Transition Works
 
-GB Studio normally resets the viewport and tilemap when changing scenes. This plugin sidesteps the reset by keeping the `bkg_offset_x`/`bkg_offset_y` accumulators alive across scene loads and by managing the camera and player positions manually during the transition. The net result is that the screen content slides continuously in one direction while the new scene's tiles load row-by-row or column-by-column into the off-screen portion of the VRAM background map.
+GB Studio normally clears the view and the background when a scene changes. This plugin keeps the current scroll position across the load and drives the camera and the player itself while the transition runs. The screen slides in one direction while the new scene's tiles are written, a row or a column at a time, into the part of the background that is off screen.
 
-### The VRAM Tilemap as a Ring Buffer
+### The background wraps around
 
-The GB hardware background tilemap is 32×32 tiles but only 20×18 tiles are visible at once. The plugin exploits this by treating the map as a wrap-around ring buffer: when scrolling right, the new scene's column data is written into the left edge of the VRAM map (which is off-screen on the right side thanks to the SCX register), so no visual pop occurs.
+The hardware background is 32 by 32 tiles and only 20 by 18 are on screen. The plugin uses the rest: scrolling right, the new column is written at the far side of the map, which wraps around to just off the right edge of the screen, so nothing pops into view.
 
-The `bkg_offset_x` and `bkg_offset_y` fields accumulate the total tile displacement across all transitions. They are masked to 5 bits (`& 31`) to stay within the 32-tile VRAM map dimension.
+The **Scroll offset X** and **Scroll offset Y** values track how far the view has moved in total. They run from 0 to 31 and wrap, matching the size of the background.
 
 ---
 
@@ -39,24 +42,24 @@ The `bkg_offset_x` and `bkg_offset_y` fields accumulate the total tile displacem
 
 ### 1. Assign a Common Tileset
 
-All scenes that scroll into each other must share the same **common tileset**. Click the puzzle-piece icon on each scene in GB Studio and assign the same common tileset asset. This ensures tile indices are consistent across scene boundaries so that the visual join is seamless.
+Every scene that scrolls into another must share one **common tileset**. Click the puzzle-piece icon on each scene and pick the same one. That keeps the tiles in the same places on both sides of the join, which is what makes it seamless.
 
 <img width="899" height="672" alt="image" src="https://github.com/user-attachments/assets/28ee25f5-b938-4af9-b176-a03d6135bbd1" />
 
 ### 2. Design Scenes with Matching Edge Dimensions
 
-Scenes can be larger than the screen, but **the dimension along the shared edge must match exactly** between the two connecting scenes:
+Scenes can be larger than the screen, but **the shared edge must be exactly the same length** on both sides:
 
-- A scene to the left/right of another must have the **same height**.
-- A scene above/below another must have the **same width**.
+- Scenes side by side must have the **same height**.
+- Scenes above and below each other must have the **same width**.
 
 ### 3. Add Set Neighbour Scene to Each Scene's Init Script
 
-In the **On Init** script of every scene that can scroll to a neighbour, add a **Set Neighbour Scene** event for each direction that has a neighbour. There is no need to place triggers on scene edges — the plugin detects boundary crossing automatically.
+In the **On Init** script of every scene that scrolls to a neighbour, add a **Set Neighbour Scene** event for each direction that has one. No triggers are needed on the edges, because the plugin notices the crossing itself.
 
-- Set the **Scene** to the neighbour scene in that direction.
-- Set the **Direction of scroll** (Up, Down, Left, Right).
-- Check **Round position to nearest tile** if using the Top-Down scene type so the player snaps cleanly to the tile grid after crossing.
+- Set **Scene** to the neighbour in that direction.
+- Set **Direction of scroll** to Up, Down, Left or Right.
+- Tick **Round position to nearest tile** in Top-Down scenes so the player lands neatly on the grid.
 
 https://github.com/user-attachments/assets/6544e245-1e59-4194-81b1-e7568e39e8b2
 
@@ -70,7 +73,7 @@ https://github.com/user-attachments/assets/9b7bf82a-9763-4abd-8066-53a8d565579c
 
 ### HUD Margins
 
-If your game displays a fixed HUD on the overlay/window layer, the plugin needs to know its size so the scroll boundaries and camera calculations account for the reduced playfield area.
+If your game shows a fixed heads-up display on the overlay, the plugin needs its size, so the edges and the camera account for the smaller playing area.
 
 | HUD Position | Setting to adjust |
 |---|---|
@@ -78,7 +81,7 @@ If your game displays a fixed HUD on the overlay/window layer, the plugin needs 
 | Right-aligned HUD | Set **Right margin** to the HUD width in tiles. |
 | Top-aligned HUD | Set **Bottom margin** to the HUD height in tiles **and** set **Top scroll offset** to the HUD height in pixels. |
 
-The **Bottom margin** shrinks the effective scene height used for scroll boundary calculations. The **Right margin** shrinks the effective width. The **Top scroll offset** shifts the draw scroll Y downward in pixels so the background origin aligns below the top HUD.
+**Bottom margin** shortens the scene height the plugin works with, **Right margin** shortens the width, and **Top scroll offset** pushes the background down in pixels so it starts below a top display.
 
 ---
 
@@ -86,29 +89,29 @@ The **Bottom margin** shrinks the effective scene height used for scroll boundar
 
 ### Maximum Scene Size is Halved
 
-Due to the ring-buffer nature of the VRAM tilemap, the usable scene dimensions are limited to **128 tiles wide and 128 tiles tall** (half of the standard GB Studio maximum of 256×256). Exceeding this causes visual wrap-around corruption during transitions.
+Because the background wraps, scenes can be at most **128 tiles wide and 128 tall**, half the usual GB Studio maximum. Going beyond that makes the picture wrap onto itself during a transition.
 
 ### Matching Edge Sizes
 
-The dimension perpendicular to the scroll direction must be identical on both sides of the boundary. For example, a left-right scroll requires both scenes to have the same number of tile rows. Mismatched sizes produce an offset seam.
+The shared edge must be the same length on both sides. A left to right scroll needs both scenes to have the same number of tile rows. A mismatch leaves a visible step at the join.
 
 ### Common Tileset Is Required
 
-Both connecting scenes must use the same common tileset. Because no tileset reload happens during a scroll transition (the VRAM tile data stays unchanged), any tile in the new scene that is not present in the shared tileset will display incorrectly.
+Both scenes must use the same common tileset. No tiles are reloaded during a scroll, so any tile the new scene needs that is not in the shared tileset comes out wrong.
 
 ### Scripts Are Killed on Transition
 
-When a transition begins, every running script in the current scene is terminated — **without** clearing variables. Timers, input events and music events are reset too. The new scene's init scripts run once the scene has loaded.
+Every running script in the current scene is stopped when a transition begins. Variables are left alone. Timers, input events and music events are reset. The new scene's init scripts run once it has loaded.
 
 ### Camera Is Unlocked During Transition
 
-The camera lock is cleared at the start of a transition and restored once both the camera and the player have reached their target positions. Normal camera following is suspended for the duration, so the transition owns the camera.
+The camera lock is cleared when a transition starts and restored once both the camera and the player have arrived. Normal following is suspended for the duration.
 
 ### Player Sprite and Tileset Loading
 
-- **Disable player sprite loading on scene scroll** (enabled by default): prevents redundant VRAM writes if the player sprite is the same in both scenes.
-- **Disable tileset loading on scene scroll**: prevents the tileset from being reloaded if both scenes share the same common tileset fully (saves time but must only be used when truly identical).
-- **Disable loading UI tileset on scene load**: prevents the UI tileset reload on every scene load; useful if the UI is part of the common tileset.
+- **Disable player sprite loading on scene scroll**, on by default, skips reloading the player sprite when it is the same in both scenes.
+- **Disable tileset loading on scene scroll** skips the tileset reload when both scenes share exactly the same common tileset. Only turn it on when they truly do.
+- **Disable loading UI tileset on scene load** skips the interface tileset reload on every scene load. Useful when the interface tiles are part of the common tileset.
 
 ---
 
@@ -120,69 +123,65 @@ All events are in the **Scene** group.
 
 ### Set Neighbour Scene
 
-**`EVENT_SET_NEIGHBOUR_SCENE`**
-
-Registers a scene as the neighbour in a given direction and enables boundary-crossing detection for the current scene. Must be called in the scene's **On Init** script. Can be called up to four times (once per direction) to register all neighbours.
+Names the scene that lies in a given direction and switches on edge detection for the current scene. Put it in the scene's **On Init** script, once per direction with a neighbour.
 
 | Field | Description |
 |-------|-------------|
 | Scene | The scene to scroll to when the player exits in the chosen direction. |
-| Direction of scroll | Up, Down, Left, or Right — the direction the screen will scroll when the boundary is crossed. |
-| Round position to nearest tile | Snaps the player's position to the nearest tile grid after the transition completes. Recommended for Top-Down scenes to prevent sub-tile misalignment. |
+| Direction of scroll | Up, Down, Left or Right. The way the screen scrolls when the player crosses that edge. |
+| Round position to nearest tile | Puts the player neatly on the tile grid after the transition. Recommended in Top-Down scenes, where being half a tile off is visible. |
 
 ---
 
 ### Auto Connect Neighbour Scenes
 
-**`EVENT_AUTO_CONNECT_NEIGHBOUR_SCENE`**
+Sets up every **Set Neighbour Scene** call for a whole group of scenes during the build, working out the connections from how you laid the scenes out in the editor. Drag your map into place and this event does the wiring.
 
-Automatically wires up **Set Neighbour Scene** calls for a whole group of scenes at **compile time**, based on how the scenes are laid out in the GB Studio editor. Place this event once, in the **On Init** script of a dedicated empty "compiler" scene — the event itself emits no runtime code where it is placed.
+Put it once, in the **On Init** script of an empty scene kept aside for the purpose. It adds nothing to your game where it sits.
 
-> **Important:** scene scripts are compiled in project scene order, and this event can only inject into scenes that are compiled *after* the scene containing it. The scene holding the event must therefore be the **first scene of the project** (it is first when it is the first scene ever added; on an existing project, edit the scene's `.gbsres` file and set its `"_index"` lower than every other scene's, e.g. `-1`). For the same reason the hosting scene itself never receives auto-connections — use a scene that is not part of the connected map.
+> **Important:** scenes are built in project order, and this event can only reach scenes built after the one holding it. That scene has to be the **first scene of the project**, which it is when it is the first one you ever added. On an existing project, edit the scene's `.gbsres` file and set its `"_index"` below every other scene's, for instance `-1`. For the same reason the scene holding the event never gets connections of its own, so use one that is not part of the map.
 
-For every scene whose **GBVM symbol** starts with the given prefix (set the symbol per scene under the scene's settings), the event looks for other matching scenes whose edges touch it in the editor and injects a script at the start of that scene's On Init that registers each detected neighbour via `set_neighbour_scene`. Scene positions are compared in tiles (editor pixel position ÷ 8).
+For every scene whose **symbol** starts with the prefix you give, set per scene in the scene's settings, the event finds other matching scenes whose edges touch it in the editor and adds the connections to the start of that scene's On Init.
 
-Because the scroll transition preserves the player's position along the shared edge with no offset correction, **two scenes are only connected when their edges are exactly aligned**: left/right neighbours must have the same top edge, up/down neighbours the same left edge. Scenes that merely overlap at an offset are skipped.
+Because a scroll keeps the player's position along the shared edge exactly, **two scenes connect only when their edges line up**. Side by side neighbours must share a top edge, and stacked ones must share a left edge. Scenes that merely overlap are skipped.
 
 | Field | Description |
 |-------|-------------|
-| Scene data symbol prefix | Only scenes whose GBVM symbol starts with this prefix are considered for connection. Leave empty to match every scene. |
-| Loop Horizontally | Additionally connects scenes on the left-most map edge to aligned scenes on the right-most map edge (wrap-around world). |
-| Loop Vertically | Additionally connects scenes on the top-most map edge to aligned scenes on the bottom-most map edge. |
-| Round position to nearest tile | Applies the tile-snap flag to every generated connection. Recommended for Top-Down scenes. |
+| Scene data symbol prefix | Only scenes whose symbol starts with this are considered. Leave it empty to match every scene. |
+| Loop Horizontally | Also connects scenes at the left edge of the map to aligned scenes at the right edge, for a world that wraps around. |
+| Loop Vertically | The same, top edge to bottom edge. |
+| Round position to nearest tile | Applies tile snapping to every connection it makes. Recommended for Top-Down scenes. |
 
-The usual plugin restrictions still apply to auto-connected scenes: shared common tileset, matching edge dimensions, and a maximum scene size of 128×128 tiles.
+The usual rules still apply to connections made this way: one shared common tileset, matching edge lengths, and a maximum scene size of 128 by 128 tiles.
 
 ---
 
 ### Assign current scene scroll offset to Variable
 
-**`EVENT_GET_SCROLL_OFFSET`**
-
-Reads the current accumulated background offset (`bkg_offset_x`, `bkg_offset_y`) and stores the values, masked to 0–31, into two variables. This is useful for scripts that need to compensate for the viewport shift when drawing to fixed screen positions (e.g. placing overlay elements that must align with world tiles).
+Puts how far the view has scrolled, from 0 to 31 on each axis, into two variables. Scripts that draw at fixed screen positions need it to line up with world tiles, for instance when placing something on the background that must sit over a particular tile.
 
 | Field | Description |
 |-------|-------------|
-| X Offset Variable | Destination variable for the horizontal tile offset (0–31). |
-| Y Offset Variable | Destination variable for the vertical tile offset (0–31). |
+| X Offset Variable | Receives the horizontal offset, 0 to 31. |
+| Y Offset Variable | Receives the vertical offset, 0 to 31. |
 
 ---
 
 ## Engine Settings
 
-These settings are found under **Settings → Engine Fields → Screen Scroll**.
+Found under **Settings**, then **Engine**, then **Screen Scroll**.
 
 ### HUD Layout Settings
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| **Right margin** (`scroll_right_margin`) | Slider (0–20 tiles) | 0 | Width in tiles reserved by a right-aligned HUD. Shrinks the effective horizontal scroll area. |
-| **Bottom margin** (`scroll_bottom_margin`) | Slider (0–18 tiles) | 0 | Height in tiles reserved by a bottom- or top-aligned HUD. Shrinks the effective vertical scroll area. |
-| **Top scroll offset** (`scroll_top_offset`) | Slider (0–144 px) | 0 | Pixel offset applied to the draw scroll Y each frame. Use to push the background origin below a top-aligned HUD. |
+| **Right margin** | Slider, 0 to 20 tiles | 0 | Width taken by a display on the right. Shortens the horizontal scrolling area. |
+| **Bottom margin** | Slider, 0 to 18 tiles | 0 | Height taken by a display at the top or bottom. Shortens the vertical scrolling area. |
+| **Top scroll offset** | Slider, 0 to 144 pixels | 0 | Pushes the background down each frame, so it starts below a display at the top. |
 
 ### Player Transition Distance
 
-These values are in **sub-pixels** (256 sub-pixels = 1 tile = 8 px). They control how far into the new scene the player walks before the scroll animation ends and the camera re-locks.
+These are in subpixels, where 256 is one tile of 8 pixels. They set how far into the new scene the player walks before the scroll finishes and the camera locks again.
 
 | Setting | Default (subpx) | Description |
 |---------|-----------------|-------------|
@@ -193,7 +192,7 @@ These values are in **sub-pixels** (256 sub-pixels = 1 tile = 8 px). They contro
 
 ### Transition Trigger Thresholds
 
-The threshold is compared against the player's position in sub-pixels. A transition triggers when the player's coordinate is **less than** the threshold (for top/left) or **greater than** `scene_size − threshold` (for bottom/right).
+These are compared against the player's position in subpixels. A transition starts when the player is nearer the edge than the threshold.
 
 | Setting | Default (subpx) | Description |
 |---------|-----------------|-------------|
@@ -206,72 +205,127 @@ The threshold is compared against the player's position in sub-pixels. A transit
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| **Disable player sprite loading on scene scroll** | Enabled | Skips re-uploading the player sprite VRAM data on scroll transitions. Safe when the player sprite is unchanged between scenes. |
-| **Disable tileset loading on scene scroll** | Disabled | Skips full tileset VRAM reload on scroll transitions. Only enable if both scenes use an identical common tileset. |
-| **Disable loading UI tileset on scene load** | Disabled | Skips the UI tileset reload on every scene load. Enable if the UI tiles are baked into the common tileset. |
+| **Disable player sprite loading on scene scroll** | Enabled | Skips reloading the player sprite during a scroll. Safe when the sprite is the same in both scenes. |
+| **Disable tileset loading on scene scroll** | Disabled | Skips the tileset reload during a scroll. Only turn it on when both scenes use exactly the same common tileset. |
+| **Disable loading UI tileset on scene load** | Disabled | Skips the interface tileset reload on every scene load. Turn it on when the interface tiles are part of the common tileset. |
 
-### Runtime-Only Fields
+### Values scripts can read
 
-These are read-only engine fields accessible via **Engine Field Value** in scripts.
+These are read-only and available through **Engine Field Value**.
 
 | Field | Description |
 |-------|-------------|
-| `scene_transition_enabled` | Non-zero when at least one neighbour scene has been registered (i.e. after any **Set Neighbour Scene** call). |
-| `is_transitioning_scene` | Non-zero and equal to the direction flag while a scroll is in progress (1=Up, 2=Right, 4=Down, 8=Left). Zero when idle. |
-| `bkg_offset_x` | Accumulated horizontal tile offset of the viewport (0–31). Updated on every transition. |
-| `bkg_offset_y` | Accumulated vertical tile offset of the viewport (0–31). Updated on every transition. |
+| **Scene transition enabled** | Not zero once at least one neighbour has been named with **Set Neighbour Scene**. |
+| **Is transitioning scene** | While a scroll runs, this holds the direction: 1 up, 2 right, 4 down, 8 left. Zero the rest of the time. |
+| **Scroll offset X** | How far the view has scrolled horizontally, 0 to 31. |
+| **Scroll offset Y** | How far the view has scrolled vertically, 0 to 31. |
+
+---
+
+## FAQ
+
+**How do I build a Link's Awakening style overworld?**
+Give every scene the same common tileset, make neighbouring scenes match along their shared edges,
+and lay them out in a grid in the editor. Then use **Auto Connect Neighbour Scenes** once, in the
+first scene of the project, and the whole map is wired up.
+
+**Do I have to add a Set Neighbour Scene event to every scene by hand?**
+Only if you want to. **Auto Connect Neighbour Scenes** does the whole map from the editor layout.
+Use the manual event for one-off connections or a map that is not laid out in a grid.
+
+**My scroll shows garbled tiles in the new scene.**
+The two scenes are not using the same common tileset, or the new scene uses tiles the shared
+tileset does not have. Nothing is reloaded during a scroll, so both scenes have to draw from the
+same set.
+
+**There is a visible step at the join between two scenes.**
+Their shared edges are different lengths. Scenes side by side need the same height, and stacked
+scenes the same width.
+
+**My auto-connect did nothing.**
+Two usual reasons: the scene holding the event is not the first scene in the project, or the scene
+symbols do not start with the prefix you gave. Scenes also have to line up exactly, sharing a top
+edge for side by side neighbours and a left edge for stacked ones.
+
+**Can my scenes be bigger than 128 by 128 tiles?**
+No. That is the limit while this plugin is installed, half the usual maximum, because the
+background has to hold two scenes' worth of edge at once.
+
+**My scripts stop running when the screen scrolls.**
+Every running script in the leaving scene is stopped. Variables survive. Move anything that must
+continue into the new scene's On Init.
+
+**My heads-up display overlaps the playfield or the scroll stops in the wrong place.**
+Set **Bottom margin** or **Right margin** to the size of the display in tiles. For a display at the
+top, also set **Top scroll offset** to its height in pixels.
+
+**How do I make the world wrap around at the edges?**
+Tick **Loop Horizontally** or **Loop Vertically** on the auto-connect event, and scenes at opposite
+edges of the map connect to each other.
+
+**How far does the player walk into the new scene?**
+512 subpixels by default, which is two tiles. The four transition distance settings change it per
+direction.
+
+**Can I speed up the transition?**
+Turn on **Disable tileset loading on scene scroll** when both scenes share exactly the same common
+tileset, and leave **Disable player sprite loading on scene scroll** on.
+
+**My overlay drawing lands on the wrong tiles after a few scrolls.**
+The view has moved. Read **Assign current scene scroll offset to Variable** and add the offset to
+your positions.
+
+**Does it work with the MetaTile or ContinuousScene plugins?**
+Yes. Compatibility variants ship for both.
 
 ---
 
 <!-- SETTINGCOST:BEGIN -->
 ### What each engine setting costs
 
-Every setting here changes what gets compiled. Figures are what you **get back by
-turning the setting off**; rows marked *off by default* show what turning it **on**
-costs instead, and sliders show the cost per step. A dash means that budget does not
-move.
+Each setting changes what gets compiled. Figures are what you **get back by turning
+the setting off**. Rows marked *off by default* show what turning it **on** costs, and
+sliders show the cost per step. "none" means that budget does not move.
 
 | Setting | Bank 0 | WRAM | Banked ROM |
 |---|---|---|---|
-| Disable player sprite loading on scene scroll | — | — | **16 B** |
-| Disable tileset loading on scene scroll *(off by default — cost of turning it on)* | — | — | +7 B |
-| Disable loading ui tileset on scene load *(off by default — cost of turning it on)* | — | — | −8 B |
+| Disable player sprite loading on scene scroll | none | none | **16 B** |
+| Disable tileset loading on scene scroll *(off by default, so this is the cost of turning it on)* | none | none | +7 B |
+| Disable loading ui tileset on scene load *(off by default, so this is the cost of turning it on)* | none | none | -8 B |
 
-Turning off every on-by-default switch above frees **16 B** of banked ROM — the full
-span between this plugin at its fullest and stripped to nothing. Treat it as a
-ceiling rather than a recipe: you keep whatever your game actually uses.
+Turning off every on-by-default switch above frees **16 B** of banked ROM. That is the
+span between the plugin at its fullest and stripped to nothing, so treat it as a
+ceiling. You keep whatever your game actually uses.
 
 <details><summary>How these were measured</summary>
 
-GB Studio 4.3.0-e1. This plugin's `engine/src/**/*.c` was compiled with the
-toolchain and flags GB Studio itself uses (`lcc -msm83:gb -Wf--max-allocs-per-node 3000
--DHUGE_TRACKER -DRUMBLE_ENABLE=0x08u`) against a merged include tree, and the SDCC object
-files' area records were read: `_HOME` is bank 0, `_DATA`/`_INITIALIZED`/`_BSS` are WRAM,
-and `_CODE*`/`_CONST`/`_LIT`/`_INITIALIZER` are banked ROM.
+GB Studio 4.3.0-e1. This plugin's engine code was compiled with the toolchain and
+flags GB Studio itself uses, and the size of each part of the result was read back and
+sorted into the three budgets: the fixed bank 0, work RAM, and switchable ROM banks.
 
 Two caveats. Only this plugin's own engine sources are measured, so a setting that also
-changes a struct shared with stock engine files can move a few more bytes in files the
-plugin does not ship. And each setting is toggled on its own: a handful measure slightly
-*negative* because enabling their code lets the compiler drop a fallback path elsewhere,
-and settings that gate other settings only show their own contribution.
+changes a shared data structure can move a few more bytes elsewhere. And each setting is
+toggled on its own, so a few measure slightly *negative* when enabling their code lets
+the compiler drop a fallback path, and a setting that gates other settings shows only
+its own contribution.
 
 </details>
 <!-- SETTINGCOST:END -->
 
 ## Memory Footprint
 
-Measured against the stock GB Studio **4.3.0-e1** engine by `measure_plugin_memory.js` (per-file SDCC compile with GB Studio's own build flags, at default engine settings; report of 2026-08-13). Figures are this plugin's *delta* versus stock — a file that replaces a stock engine file counts only the difference, which is why a plugin can come out negative. Using the plugin's events additionally compiles a few bytes of GBVM script per call into your project's script banks, on top of the fixed cost below.
+Measured against the stock GB Studio **4.3.0-e1** engine at default engine settings, report of 2026-08-13. Figures are the difference against a stock project: a file that replaces a stock engine file counts only the change, which is why a plugin can come out negative. Each event you use also compiles a few bytes of script into your project, on top of the fixed cost below.
 
 | Budget | Cost |
 |---|---|
-| Bank 0 (HOME) | −152 bytes |
+| Bank 0 (HOME) | -152 bytes |
 | WRAM | +46 bytes |
 | Banked ROM | +3,707 bytes |
 
-- **Bank 0:** the plugin *gives back* 152 bytes — its replacements for stock engine files compile smaller than the originals. See [Bank 0 (HOME) Usage](#bank-0-home-usage).
-- **WRAM:** 46 bytes, mostly scene-transition scratch state.
-- **Banked ROM:** 3,707 bytes, 53 of which land in stock files the plugin does not ship but which recompile differently because it overrides `camera.h`, `collision.h`, `scroll.h` and `ui.h`. It replaces nine stock engine files, so the figure is a net one.
-- **Engine WRAM headroom:** a stock GB Studio 4.3.0 project leaves about **854 bytes** of WRAM free (usable engine WRAM is 7,776 bytes at 0xC0A0–0xDF00; the stock engine uses 6,922). With this plugin installed roughly **808 bytes** remain. That does not change with the number of global variables your project defines: the script memory array is a fixed 3,584 bytes at stock engine settings (VM_HEAP_SIZE + VM_MAX_CONTEXTS × VM_CONTEXT_STACK_SIZE = 768 + 16 × 64 words).
+- **Bank 0:** the plugin *gives back* 152 bytes, because its replacements for stock engine files compile smaller than the originals. See [Bank 0 (HOME) Usage](#bank-0-home-usage).
+- **WRAM:** 46 bytes, mostly working state for the transition.
+- **Banked ROM:** 3,707 bytes. 53 of those land in stock files the plugin does not ship, which compile slightly differently once it is installed. It replaces nine stock engine files, so the figure is what is left after subtracting them.
+- **Engine WRAM headroom:** a stock GB Studio 4.3.0 project leaves about **854 bytes** of WRAM free (the engine has 7,776 bytes to work with and uses 6,922 of them). With this plugin installed roughly **808 bytes** remain. Adding more global variables to your project does not change that figure, because script memory is a fixed 3,584 byte block at stock engine settings.
 - **SRAM:** not used.
 
 ---
@@ -279,14 +333,13 @@ Measured against the stock GB Studio **4.3.0-e1** engine by `measure_plugin_memo
 <!-- BANK0:BEGIN -->
 ## Bank 0 (HOME) Usage
 
-Bank 0 is the 16 KB non-switchable ROM bank that the GB Studio engine core,
-the interrupt handlers and the GBDK runtime all share. Banked ROM is cheap
-(add another bank), bank 0 is not, so it is usually the first thing a project
-runs out of.
+Bank 0 is the 16 KB fixed ROM bank shared by the GB Studio engine core, the
+interrupt handlers and the GBDK runtime. Extra banked ROM is cheap to add,
+bank 0 is not, so bank 0 is usually the first thing a project runs out of.
 
 | | Bytes |
 |---|---|
-| Bank 0 used by this plugin | **−152** |
+| Bank 0 used by this plugin | **-152** |
 | Bank 0 free with this plugin installed | **1,603** of 16,384 (90% used) |
 
 **This plugin gives bank 0 space back.** Its replacements for stock engine
@@ -294,23 +347,23 @@ files compile smaller than the originals, freeing 152 bytes.
 
 | Module | This plugin | Stock engine | Bank 0 cost |
 |---|---|---|---|
-| `core/actor.c` | 669 | 871 | −202 |
-| `core/collision.c` | 431 | 401 | +30 |
-| `core/scroll.c` | 306 | 286 | +20 |
+| Actor handling | 669 | 871 | -202 |
+| Collision | 431 | 401 | +30 |
+| Scrolling | 306 | 286 | +20 |
 
-Modules that replace or patch a stock engine file only cost the *difference*:
+A module that replaces a stock engine file costs only the *difference*, because
 the stock version's bank 0 bytes were being spent anyway.
 
 <details><summary>How this was measured</summary>
 
-GB Studio 4.3.0-e1, default engine settings. Each module is compiled with the
-toolchain and flags GB Studio itself uses, and the `A _HOME size` record SDCC
-writes into the resulting `.rel` object is read back; the stock column is the
-same compile of the engine file this module replaces.
+GB Studio 4.3.0-e1, default engine settings. Each module was compiled with the
+toolchain and flags GB Studio itself uses, and the bank 0 size the compiler
+recorded was read back. The stock column is the same compile of the engine file
+the module replaces.
 
-The "free" figure is a stock project with this plugin and nothing else. Your
-own number will differ: other plugins, and any engine settings that change what
-the core compiles, move it independently of this plugin.
+The "free" figure assumes a stock project with this plugin and nothing else.
+Your own number will differ, because other plugins and any engine settings that
+change what the core compiles move it too.
 
 </details>
 <!-- BANK0:END -->
@@ -333,15 +386,15 @@ bumps, patch regeneration, packaging fixes and documentation edits are omitted.
 
 ### 2026-06-14
 
-- Added custom script parameter / stack support to the events.
+- Added custom script parameter and stack support to the events.
 
 ### 2026-06-08
 
 First published in the official plugin repository. This entry covers everything
 developed since the plugin's standalone release in July 2024:
 
-- New event to store the scroll offset in a variable, for tilemap editing.
-- Script lock support.
-- Refined the `#define` settings for the transition threshold and distance.
-- Exposed additional engine fields.
-- Fixes: normal scene load after a scene scroll, and the small blip when scrolling up with a HUD margin.
+- Added the event that stores the scroll offset in a variable, for editing the background.
+- Added script lock support.
+- Refined the transition threshold and distance settings.
+- Exposed more values for scripts to read.
+- Fixed a normal scene load after a scroll, and the small jump when scrolling up with a display margin.
